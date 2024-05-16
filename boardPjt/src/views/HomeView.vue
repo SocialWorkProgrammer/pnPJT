@@ -1,6 +1,6 @@
 <script setup>
 import { RouterView, RouterLink } from 'vue-router'
-import getArticles from '@/components/getArticles.vue'
+import ArticlesList from '@/components/ArticleList.vue'
 import { onMounted } from 'vue'
 import { useBoardStore } from '@/stores/counter'
 
@@ -14,9 +14,12 @@ onMounted(() => {
 
 <template>
   <div>
-    <h1>홈 페이지</h1>
+  <h1>홈 페이지</h1>
+  <p>악! 홈 페이지에 오신 것을 진심으로 환영하는 바 입니다!</p>
+    <nav>
     <RouterLink :to="{ name: 'CreateArticleView' }">[CREATE]</RouterLink>
-    <getArticles />
+    <ArticleList />
+  </nav>
   </div>
 </template>
 

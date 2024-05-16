@@ -5,8 +5,7 @@ import { useRouter } from 'vue-router'
 
 export const useBoardStore = defineStore('board', () => {
   const articles = ref([])
-  const API_URL = "http://70.12.102.167:5173"
-  
+  const API_URL = "http://127.0.0.1:8000"
   const isLogin = computed(() => {
     if (token.value === null) {
       return false
@@ -15,6 +14,7 @@ export const useBoardStore = defineStore('board', () => {
     }
   })
   
+// 게시글 가져오기
   const getArticles = function () {
     axios({
       method: 'get',
@@ -24,13 +24,14 @@ export const useBoardStore = defineStore('board', () => {
       }
     })
     .then((response) => {
-      console.log('왜성공?', response)
+      console.log('게시물을 가져오는데 성공했다!', response)
       articles.value = response.data
     })
-    .catch((error) => console.log('하...'), error)
+    .catch((error) => {
+      console.log('게시물을 가져오는데 실패했다!', error)
+    })
   }
-
-
+// 회원가입 폼
   const signUp = function (payload) {
     const { username, password1, password2 } = payload
     axios({
@@ -46,10 +47,11 @@ export const useBoardStore = defineStore('board', () => {
       logIn({username, password})
     })
     .catch((error) => {
-      console.log('에러다!', error)
+      console.log('회원가입 실패!', error)
     })
   }
 
+// 로그인 폼
   const router = useRouter()
   const token = ref(null)
   const logIn = function (payload) {
@@ -62,11 +64,11 @@ export const useBoardStore = defineStore('board', () => {
       }
     })
     .then((response) => {
-      console.log('리스폰스 받았다', response.data.key)
+      console.log('로그인 성공!', response.data.key)
       token.value = response.data.key
       router.push({name: 'home'})
     })
-    .catch((error) => console.log('새끼... 기열!', error))
+    .catch((error) => console.log('로그인 실패!', error))
 
   }
 

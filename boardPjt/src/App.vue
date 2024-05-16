@@ -1,7 +1,10 @@
 <template>
   <div>
-    <h1>살려줘</h1>
-    <RouterLink :to="{name : 'LoginView'}">[Login]</RouterLink>
+    <h1>App.vue의 영역</h1>
+    <nav>
+      <RouterLink :to="{name : 'LoginView'}">[Login]</RouterLink>
+      <RouterLink :to="{name : 'ArticleView'}">[Article]</RouterLink>
+    </nav>
   </div>
   <RouterView />
 </template>
@@ -10,7 +13,7 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import { onMounted } from 'vue'
-import { useBoardStore } from './stores/counter';
+import { useBoardStore } from './stores/counter'
 
 const store = useBoardStore()
 onMounted(() => {

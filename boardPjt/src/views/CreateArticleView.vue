@@ -1,6 +1,7 @@
 <template>
     <div>
       <h1>게시글 작성</h1>
+      <p>악! 게시글 작성 폼에 오신 것을 환영하는 바 입니다!</p>
       <form @submit.prevent="createArticle">
         <div>
           <label for="title">제목 : </label>
@@ -40,7 +41,7 @@
     })
       .then((response) => {
         console.log(response.data)
-        router.push({ name: 'getArticleView' })
+        router.push({ name: 'CreateArticleView' })
       })
       .catch((error) => {
         console.log(error)

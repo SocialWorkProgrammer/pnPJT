@@ -14,7 +14,6 @@ from .models import Article, Comment
 # Create your views here.
 
 @api_view(['GET', 'POST'])
-@permission_classes([IsAuthenticated])
 def article_list(request):
   if request.method == 'GET':
     articles = get_list_or_404(Article)
@@ -28,7 +27,6 @@ def article_list(request):
       return Response(serializer.data, status = status.HTTP_201_CREATED)
   
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
 def article_detail(request, article_pk):
   article = get_object_or_404(Article, pk=article_pk)
 
@@ -37,7 +35,6 @@ def article_detail(request, article_pk):
     return Response(serializer.data)
   
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
 def comment_create(request, article_pk):
   article = get_object_or_404(Article, pk=article_pk)
   if request.method =='POST':
