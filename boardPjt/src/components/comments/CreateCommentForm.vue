@@ -1,7 +1,7 @@
 <template>
     <div>
       <p>주의 : 분탕 시 영구차단임 </p>
-      <form @submit.prevent="createComment">
+      <form @submit="createComment">
         <div>
           <label for="content">내용 : </label>
           <textarea v-model.trim="content" id="content"></textarea>
@@ -15,16 +15,17 @@
   import axios from 'axios'
   import { ref } from 'vue'
   import { useBoardStore } from '@/stores/counter'
-  import { useRouter } from 'vue-router'
+  import { useRoute, useRouter } from 'vue-router'
   
   const store = useBoardStore()
   const content = ref(null)
+  const route = useRoute()
   const router = useRouter()
   
   const createComment = function () {
     axios({
       method: 'post',
-      url: `${store.API_URL}/community/article/:id/comment`,
+      url: `${store.API_URL}/community/article/${route.params.id}/comment/create/`,
       data: {
         content: content.value
       },

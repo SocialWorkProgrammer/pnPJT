@@ -1,10 +1,11 @@
 <template>
   <div>
     <h1>App.vue의 영역</h1>
-    <nav>
-      <RouterLink :to="{name : 'LoginView'}">[Login]</RouterLink>
+    <p>현재 로그인 상태 : {{ store.isLogin }}</p>
+        <RouterLink :to="{name : 'SignUpView'}">[SignUp]</RouterLink>
+        <RouterLink :to="{name : 'LoginView'}">[Login]</RouterLink>
       <RouterLink :to="{name : 'ArticleView'}">[Article]</RouterLink>
-    </nav>
+      <LogoutView/>
   </div>
   <RouterView />
 </template>
@@ -14,7 +15,7 @@
 import { RouterLink, RouterView } from 'vue-router'
 import { onMounted } from 'vue'
 import { useBoardStore } from './stores/counter'
-
+import LogoutView from '@/views/HomeView/LogoutView.vue'
 const store = useBoardStore()
 onMounted(() => {
   store.getArticles()

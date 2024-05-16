@@ -66,7 +66,7 @@ export const useBoardStore = defineStore('board', () => {
     .then((response) => {
       console.log('로그인 성공!', response.data.key)
       token.value = response.data.key
-      router.push({name: 'home'})
+      router.push({name: 'HomeView'})
     })
     .catch((error) => console.log('로그인 실패!', error))
 
