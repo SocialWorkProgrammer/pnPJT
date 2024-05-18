@@ -15,6 +15,15 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+import os
+import environ
+env = environ.Env(DEBUG=(bool,True))
+environ.Env.read_env(
+    env_file=os.path.join(BASE_DIR, '.env')
+)
+
+EXCHANGE_API_KEY = env('EXCHANGE_API_KEY')
+PRODUCT_API_KEY = env('PRODUCT_API_KEY')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -161,3 +170,6 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.User'
+
+# account 어댑터
+ACCOUNT_ADAPTER = 'accounts.models.CustomAccountAdapter'

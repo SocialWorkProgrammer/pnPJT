@@ -19,7 +19,7 @@ class User(AbstractBaseUser):
     is_superuser = models.BooleanField(default=False)
 """
 
-
+from django.conf import settings
 import random
 import requests
 
@@ -27,7 +27,7 @@ first_name_samples = '김이박최정강조윤장임'
 middle_name_samples = '민서예지도하주윤채현지'
 last_name_samples = '준윤우원호후서연아은진'
 
-
+# 무작위 사용자 이름 생성
 def random_name():
     result = ''
     result += random.choice(first_name_samples)
@@ -40,10 +40,12 @@ def random_name():
 DP_URL = 'http://finlife.fss.or.kr/finlifeapi/depositProductsSearch.json'
 SP_URL = 'http://finlife.fss.or.kr/finlifeapi/savingProductsSearch.json'
 
-API_KEY = '<API_KEY>'
+API_KEY = '142dc84483391d09064354c8ee7e7f30'
 
+# 금융상품 코드 저장 리스트
 financial_products = []
 
+# API 요청 파라미터
 params = {
     'auth': API_KEY,
     # 금융회사 코드 020000(은행), 030200(여신전문), 030300(저축은행), 050000(보험), 060000(금융투자)
@@ -65,6 +67,7 @@ baseList = response.get('result').get('baseList')  # 상품 목록
 for product in baseList:
     financial_products.append(product['fin_prdt_cd'])
 
+# JSON 파일 필드 키
 dict_keys = [
     'username',
     'gender',
@@ -78,32 +81,36 @@ dict_keys = [
 import json
 from collections import OrderedDict
 
+# 사용자 정보 담을 oRDEREDdICT 객체 생성
 file = OrderedDict()
 
-username_list = []
+# 중복되지 않는 유저 이름 생성 리스트
+name_list = []
 N = 10000
 i = 0
 
+# 중복되지 않는 사용자 이름 생성
 while i < N:
     rn = random_name()
-    if rn in username_list:
+    if rn in name_list:
         continue
 
-    username_list.append(rn)
+    name_list.append(rn)
     i += 1
 
 
 # 저장 위치는 프로젝트 구조에 맞게 수정합니다.
-save_dir = '../backend/accounts/fixtures/accounts/user_data.json'
-with open(save_dir, 'w', encoding="utf-8") as f:
+save_dir = 'accounts/fixtures/accounts/user_data.json'
+with open(save_dir, 'w', encoding="utf-8") as f:        # JSON 파일 생성하고 데이터 작성
     f.write('[')
-
+    # 무작위 데이터 생성 후 JSON 파일에 작성
     for i in range(N):
         # 랜덤한 데이터를 삽입
         file['model'] = 'accounts.User'
         file['pk'] = i + 1
         file['fields'] = {
-            'username': username_list[i],  # 유저 이름 랜덤 생성
+            'username' : 'tester'+str(i),   # 로그인 시 입력할 유저 아이디
+            'name': name_list[i],  # 유저 이름 랜덤 생성
             # 랜덤한 0~5개의 상품을 가입하도록 삽입됨
             'financial_products': ','.join(
                 [
@@ -115,7 +122,6 @@ with open(save_dir, 'w', encoding="utf-8") as f:
             'money': random.randrange(0, 100000000, 100000),  # 현재 가진 금액
             'salary': random.randrange(0, 1500000000, 1000000),  # 연봉
             'password': '1234',
-            'nickname': None,
             'is_active': True,
             'is_staff': False,
             'is_superuser': False,

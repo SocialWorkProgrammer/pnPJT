@@ -22,7 +22,7 @@ urlpatterns = [
     # 커뮤니티
     path('community/', include('community.urls')), 
     # 환율
-    # path('exchange/', include('exchange.urls')),  
+    path('exchange/', include('exchange.urls')),  
     # 금융 상품 관련 모든 것  
     # path('finance/', include('finance.urls')),    
     # 로그인 = /login, 로그아웃 =/logout(아마), 그 외 프로필 관련 url
