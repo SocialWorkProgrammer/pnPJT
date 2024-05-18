@@ -41,7 +41,7 @@
     })
       .then((response) => {
         console.log(response.data)
-        router.push({ name: 'CreateArticleView' })
+        router.push({ name: 'ArticleView' })
       })
       .catch((error) => {
         console.log(error)

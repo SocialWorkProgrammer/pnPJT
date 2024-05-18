@@ -1,13 +1,12 @@
 <template>
   <div>
     <h1>App.vue의 영역</h1>
-    <p>현재 로그인 상태 : {{ store.isLogin }}</p>
-        <RouterLink :to="{name : 'SignUpView'}">[SignUp]</RouterLink>
-        <RouterLink :to="{name : 'LoginView'}">[Login]</RouterLink>
-      <RouterLink :to="{name : 'ArticleView'}">[Article]</RouterLink>
-      <LogoutView/>
+    <RouterLink :to="{name : 'SignUpView'}">[회원가입]</RouterLink>
+    <RouterLink :to="{name : 'LoginView'}">[로그인]</RouterLink>
+    <LogoutView />
+    <Navbar />
+    <RouterView />
   </div>
-  <RouterView />
 </template>
 
 
@@ -16,6 +15,7 @@ import { RouterLink, RouterView } from 'vue-router'
 import { onMounted } from 'vue'
 import { useBoardStore } from './stores/counter'
 import LogoutView from '@/views/HomeView/LogoutView.vue'
+import Navbar from '@/components/functions/Navbar.vue'
 const store = useBoardStore()
 onMounted(() => {
   store.getArticles()
@@ -23,5 +23,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
+
 
 </style>

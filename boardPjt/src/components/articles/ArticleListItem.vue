@@ -1,11 +1,11 @@
 <template>
     <div>
-        <h1>제목 : {{ article.title }}</h1>
-        <p>{{ article.id }}</p>
-        <p> {{ article }}</p>
-        <p>{{ article.comment }}</p>
         <RouterLink
         :to="{ name: 'DetailView', params: {id: article.id}}">[DETAIL]</RouterLink>
+        <h1>제목 : {{ article.title }}</h1>
+        <!-- <p>글 번호 : {{ article.id }}</p> -->
+        <p> {{ article.content }}</p>
+        <p>{{ article.comment }}</p>
     </div>
 </template>
 
