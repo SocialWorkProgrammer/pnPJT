@@ -6,6 +6,7 @@ import DetailView from '@/views/ArticleView/DetailView.vue'
 import LoginView from '@/views/HomeView/LoginView.vue'
 import SignUpView from '@/views/HomeView/SignUpView.vue'
 import MapView from '@/views/FunctionView/MapView.vue'
+import ExcahngeView from '@/views/FunctionView/ExchangeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,6 +18,7 @@ const router = createRouter({
         {path: '', name: 'HomeView', component: HomeView},
         {path: 'login/', name: 'LoginView', component: LoginView},
         {path: 'signup/', name: 'SignUpView', component: SignUpView},
+        {path: 'exchange/', name: 'ExchangeView', component: ExchangeView},
       ]
     },
     {
@@ -39,6 +41,7 @@ const router = createRouter({
 })
 
 import { useBoardStore } from '@/stores/counter'
+import ExchangeView from '@/views/FunctionView/ExchangeView.vue'
 
 router.beforeEach((to, from) => {
   const store = useBoardStore()

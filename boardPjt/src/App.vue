@@ -5,6 +5,7 @@
     <RouterLink :to="{name : 'LoginView'}">[로그인]</RouterLink>
     <LogoutView />
     <Navbar />
+    <Article />
     <RouterView />
   </div>
 </template>
@@ -16,6 +17,7 @@ import { onMounted } from 'vue'
 import { useBoardStore } from './stores/counter'
 import LogoutView from '@/views/HomeView/LogoutView.vue'
 import Navbar from '@/components/functions/Navbar.vue'
+import Article from './components/functions/Article.vue'
 const store = useBoardStore()
 onMounted(() => {
   store.getArticles()

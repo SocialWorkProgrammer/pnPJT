@@ -9,6 +9,7 @@
         <RouterLink :to="{ name: 'MapView' }">[지도]</RouterLink>
       </div>
       <div class="nav-mag">지도를 통해 전국의 은행을 검색할 수 있습니다.</div>
+        <RouterLink :to="{ name: 'ExchangeView' }">[환율]</RouterLink>
     </nav>
   </div>
 </template>
