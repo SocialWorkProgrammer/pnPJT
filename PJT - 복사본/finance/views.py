@@ -1,12 +1,15 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.response import Response
+from rest_framework import status
 import requests
+from django.http import HttpResponse
 from django.conf import settings
 from rest_framework.decorators import api_view
 from .serializers import DepositProductsSerializer, DepositOptionsSerializer, SavingProductsSerializer, SavingOptionsSerializer, DepositProductDetailSerializer, SavingProductDetailSerializer, DepositSignupSerializer, SavingSignupSerializer, SignupDepositSerializer, SignupSavingSerializer
 from .models import DepositProducts, DepositOptions, SavingProducts, SavingOptions
 from django.shortcuts import get_object_or_404, get_list_or_404
+from accounts.models import User
 # Create your views here.
 @api_view(['GET'])
 def data(request):
@@ -108,6 +111,8 @@ def data(request):
     serializer = SavingOptionsSerializer(data = saving_option)
     if serializer.is_valid(raise_exception=True):
       serializer.save(saving=product)                                # 외래키로 예금 상품 객체를 지정
+  return HttpResponse("정상적 처리 완료")
+
 
 
 
@@ -188,10 +193,135 @@ def bank_saving_products(request, kor_co_nm):
     serializer = SavingProductsSerializer(savings, many=True)
     return Response(serializer.data)
   
+# 예금 상품 가입, 해지
+@api_view(['GET', 'POST', 'DELETE'])
+def signup_deposit(request, deposit_code):
+  # 사용자 인증 여부 확인
+  if not request.user.is_authenticated:
+    return Response({"detail" : "로그인 하십시오"}, status=status.HTTP_401_UNAUTHORIZED)
+
+  # 주어진 deposit_code에 해당하는 예금상품 가져오기
+  deposit_product = get_object_or_404(DepositProducts, deposit_code=deposit_code)
+
+  # GET일 때 예금상품 객체 직렬화하여 반환
+  if request.method == 'GET':
+    serializer = SignupDepositSerializer(deposit_product)
+    return Response(serializer.data)
+  
+  # POST일 때 사용자가 예금상품 객체에 포함되지 않은 경우 추가
+  elif request.method == 'POST':
+    # 사용자가 contract_user에 포함되지 않은 경우
+    if request.user not in deposit_product.contract_user.all():
+      deposit_product.contract_user.add(request.user)   # 사용자 추가
+      # 예금 상품 객체를 요청 데이터와 함께 부분적으로 직렬화
+      serializer = SignupDepositSerializer(deposit_product, data=request.data, partial=True)
+      if serializer.is_valid(raise_exception=True):
+        serializer.save()
+        return Response({'detail':'상품 추가'}, status=status.HTTP_200_OK)
+    else:
+      # 사용자가 이미 포함되어 있는 경우
+      return Response({'detail':'이미 가입했다'}, staus=status.HTTP_400_BAD_REQUEST)
+    
+  # DELETE일 때 사용자가 예금상품 객체에 포함되어 있는 경우 삭제
+  elif request.method == 'DELETE':
+    if request.user in deposit_product.contract_user.all():
+      deposit_product.contract_user.remove(request.user)    # 사용자 제거
+      return Response({"detail" : "삭제 완료"}, status=status.HTTP_204_NO_CONTENT)
+    else:
+      # 사용자가 포함되어 있지 않은 경우
+      return Response({"detail":"가입한 상품이 아닙니다"}, status=status.HTTP_404_NOT_FOUND)
+    
+# 적금 상품 가입, 해지
+@api_view(['GET', 'POST', 'DELETE'])
+def signup_saving(request, saving_code):
+  # 사용자 인증 여부 확인
+  if not request.user.is_authenticated:
+    return Response({"detail" : "로그인 하십시오"}, status=status.HTTP_401_UNAUTHORIZED)
+
+  # 주어진 saving_code에 해당하는 적금상품 가져오기
+  saving_product = get_object_or_404(SavingProducts, saving_code=saving_code)
+
+  # GET일 때 적금상품 객체 직렬화하여 반환
+  if request.method == 'GET':
+    serializer = SignupSavingSerializer(saving_product)
+    return Response(serializer.data)
+  
+  # POST일 때 사용자가 적금상품 객체에 포함되지 않은 경우 추가
+  elif request.method == 'POST':
+    # 사용자가 contract_user에 포함되지 않은 경우
+    if request.user not in saving_product.contract_user.all():
+      saving_product.contract_user.add(request.user)   # 사용자 추가
+      # 적금 상품 객체를 요청 데이터와 함께 부분적으로 직렬화
+      serializer = SignupSavingSerializer(saving_product, data=request.data, partial=True)
+      if serializer.is_valid(raise_exception=True):
+        serializer.save()
+        return Response({'detail':'상품 추가'}, status=status.HTTP_200_OK)
+    else:
+      # 사용자가 이미 포함되어 있는 경우
+      return Response({'detail':'이미 가입했다'}, staus=status.HTTP_400_BAD_REQUEST)
+    
+  # DELETE일 때 사용자가 예금상품 객체에 포함되어 있는 경우 삭제
+  elif request.method == 'DELETE':
+    if request.user in saving_product.contract_user.all():
+      saving_product.contract_user.remove(request.user)    # 사용자 제거
+      return Response({"detail" : "삭제 완료"}, status=status.HTTP_204_NO_CONTENT)
+    else:
+      # 사용자가 포함되어 있지 않은 경우
+      return Response({"detail":"가입한 상품이 아닙니다"}, status=status.HTTP_404_NOT_FOUND)
 
 
 
 
+# 사용자가 설정한 희망 예치 기간에 맞는 예금 및 적금 상품 추천
+@api_view(['GET'])
+def product_recommend_period(request):
+  # 사용자 인증 확인
+  if not request.user.is_authenticated:
+    return Response({"detail":"로그인 해야 합니다"}, status=status.HTTP_401_UNAUTHORIZED)
+  
+  # 요청한 사용자 가져오기
+  user = get_object_or_404(User, username=request.user.username)
 
+  # 사용자의 희망 예금기간 가져오기
+  desire_deposit_period = user.deposit_period
 
+  # 희망 예치기간이 없는 경우 
+  if not desire_deposit_period:
+    return Response({"message": "희망기간을 입력해주십시오"}, status=status.HTTP_400_BAD_REQUEST)
 
+  # 사용자가 원하는 상한 기간 계산(희망 예치 기간 + 2개월)
+  max_period = desire_deposit_period + 2
+
+  # 희망 조건에 맞는 예금 상품 필터링
+  deposit_product = DepositProducts.objects.filter(depositoption__save_trm__lte=max_period)
+
+  # 중복 제거 및 상위 10개 상품 선택
+  deposit_product = list(set(deposit_product.order_by("-depositoption__intr_rate")[:10]))
+
+  # 사용자의 희망 적금 기간 가져오기
+  desire_saving_period = user.saving_period
+
+  # 희망 적금기간이 없는 경우
+  if not desire_saving_period:
+    return Response({"message": "희망기간을 입력해주십시오"}, status=status.HTTP_400_BAD_REQUEST)
+  
+  # 사용자가 원하는 상한 기간 계산(희망 예치 기간 + 2개월)
+  max_saving_period = desire_saving_period + 2
+
+  # 희망 조건에 맞는 적금 상품 필터링
+  saving_product = SavingProducts.objects.filter(savingoption__save_trm_lte=max_saving_period)
+
+  # 중복 제거 및 상위 10개 상품 선택
+  saving_product = list(set(saving_product.order_by("-savingoption__intr_rate")[:10]))
+
+  # 필터링 된 예금 및 적금 상품 직렬화
+  depositserializers = DepositProductDetailSerializer(deposit_product, many=True)
+  savingserializers = SavingProductDetailSerializer(saving_product, many=True)
+
+  # 응답 데이터 생성
+  product_list = {
+    "deposit_product":depositserializers.data,
+    "saving_product":savingserializers.data
+  }
+
+  return Response(product_list)

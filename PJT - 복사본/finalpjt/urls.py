@@ -28,5 +28,7 @@ urlpatterns = [
     # 로그인 = /login, 로그아웃 =/logout(아마), 그 외 프로필 관련 url
     path('accounts/', include('dj_rest_auth.urls')),    
     # 회원가입
-    path('accounts/signup/', include('dj_rest_auth.registration.urls'))   
+    path('accounts/signup/', include('dj_rest_auth.registration.urls')),
+    # 프로필
+    path('profile/', include('accounts.urls'))   
 ]

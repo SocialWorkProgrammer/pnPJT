@@ -2,6 +2,7 @@ from rest_framework import serializers
 from allauth.account.adapter import get_adapter
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from .models import User
+from finance.serializers import SignupDepositSerializer, SignupSavingSerializer
 
 # 필드 정의
 class CustomRegisterSerializer(RegisterSerializer):
@@ -31,10 +32,18 @@ class CustomRegisterSerializer(RegisterSerializer):
     return user
   
 
-class UserProfile(serializers.ModelSerializer):
+class UserProfileSerializer(serializers.ModelSerializer):
   class META:
     model = User
     fields = ('id', 'username', 'name', 'email', 'age', 'money', 'salary',)
     read_only_fields = ('id', 'username', 'name', )
-  
+
+
+class UserDetailSerializer(serializers.ModelSerializer):
+  sign_up_deposits= SignupDepositSerializer(many=True)
+  sign_up_saving = SignupSavingSerializer(many=True)
+  class Meta:
+    model = User
+    fields = '__all__'
+    read_only_fields = ('id', 'username', 'name',)
 
