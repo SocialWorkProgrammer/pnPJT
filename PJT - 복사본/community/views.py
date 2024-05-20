@@ -36,7 +36,7 @@ def article(request, article_pk):
     if request.user.is_authenticated:
       if request.user == article.user:
         article.delete()
-        return Response(serializer.data, status = status.HTTP_204_NO_CONTENT)
+        return Response(status = status.HTTP_204_NO_CONTENT)
     else:
       return Response({ 'detail' : '권한 없음'}, status=status.HTTP_401_UNAUTHORIZED)
   

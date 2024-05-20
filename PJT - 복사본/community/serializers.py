@@ -23,7 +23,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = Comment
-    fields = '__all__'
+    fields = ('user', 'content', 'updated_at',)
     read_only_fields = ('article', 'user',)
 
 # 상세 게시글(댓글 목록도 포함)
@@ -33,6 +33,6 @@ class ArticleSerializer(serializers.ModelSerializer):
   comments = CommentSerializer(many=True, read_only=True)
   class Meta:
     model = Article
-    fields = ('title', 'content', 'comments', 'user',)
+    fields = ('id', 'title', 'content', 'user', 'updated_at', 'comments',)
 
   
