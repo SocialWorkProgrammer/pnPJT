@@ -15,7 +15,7 @@ class ArticleListSerializer(serializers.ModelSerializer):
 
   class Meta : 
     model = Article
-    fields = ('user', 'title', )
+    fields = ('id', 'user', 'title', 'content',)
 
 # 댓글
 class CommentSerializer(serializers.ModelSerializer):
@@ -23,7 +23,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = Comment
-    fields = ('user', 'content', 'updated_at',)
+    fields = ('id', 'user', 'content', 'updated_at',)
     read_only_fields = ('article', 'user',)
 
 # 상세 게시글(댓글 목록도 포함)

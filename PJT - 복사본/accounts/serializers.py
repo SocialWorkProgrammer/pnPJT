@@ -31,3 +31,10 @@ class CustomRegisterSerializer(RegisterSerializer):
     return user
   
 
+class UserProfile(serializers.ModelSerializer):
+  class META:
+    model = User
+    fields = ('id', 'username', 'name', 'email', 'age', 'money', 'salary',)
+    read_only_fields = ('id', 'username', 'name', )
+  
+
