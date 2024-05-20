@@ -6,7 +6,7 @@ class UserSerializer(serializers.ModelSerializer):
   
   class Meta:
     model = get_user_model()
-    fields = ('',)
+    fields = ('username',)
 
 
 # 전체 게시글
@@ -15,7 +15,7 @@ class ArticleListSerializer(serializers.ModelSerializer):
 
   class Meta : 
     model = Article
-    fields = ('user', 'title', )
+    fields = ('user', 'title', 'id', 'content')
 
 # 댓글
 class CommentSerializer(serializers.ModelSerializer):
@@ -23,7 +23,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = Comment
-    fields = '__all__'
+    fields = ('user', 'content', 'updated_at', 'id')
     read_only_fields = ('article', 'user',)
 
 # 상세 게시글(댓글 목록도 포함)
@@ -33,6 +33,6 @@ class ArticleSerializer(serializers.ModelSerializer):
   comments = CommentSerializer(many=True, read_only=True)
   class Meta:
     model = Article
-    fields = ('title', 'content', 'comments', 'user',)
+    fields = '__all__'
 
   

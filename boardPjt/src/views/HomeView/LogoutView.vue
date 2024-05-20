@@ -30,6 +30,6 @@ const logout = function () {
   }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 
 </style>

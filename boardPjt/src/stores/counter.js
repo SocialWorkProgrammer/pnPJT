@@ -5,16 +5,15 @@ import { useRouter } from 'vue-router'
 
 export const useBoardStore = defineStore('board', () => {
   const articles = ref([])
+  const token = ref(null)
   const API_URL = "http://127.0.0.1:8000"
+  const router = useRouter()
+
   const isLogin = computed(() => {
-    if (token.value === null) {
-      return false
-    } else {
-      return true
-    }
+    return token.value !== null
   })
-  
-// 게시글 가져오기
+
+  // 게시글 가져오기
   const getArticles = function () {
     axios({
       method: 'get',
@@ -31,31 +30,30 @@ export const useBoardStore = defineStore('board', () => {
       console.log('게시물을 가져오는데 실패했다!', error)
     })
   }
-// 회원가입 폼
+
+  // 회원가입 폼
   const signUp = function (payload) {
-    const { username, password1, password2 } = payload
+    const { username, password1, password2, name } = payload
     axios({
       method : 'post',
       url: `${API_URL}/accounts/signup/`,
       data : {
-        username, password1, password2
+        username, password1, password2, name
       }
     })
     .then((response) => {
       console.log('회원가입 성공!')
       const password = password1
-      logIn({username, password})
+      logIn({ username, password })
     })
     .catch((error) => {
       console.log('회원가입 실패!', error)
     })
   }
 
-// 로그인 폼
-  const router = useRouter()
-  const token = ref(null)
+  // 로그인 폼
   const logIn = function (payload) {
-    const {username, password} = payload
+    const { username, password } = payload
     axios({
       method: 'post',
       url: `${API_URL}/accounts/login/`,
@@ -66,12 +64,25 @@ export const useBoardStore = defineStore('board', () => {
     .then((response) => {
       console.log('로그인 성공!', response.data.key)
       token.value = response.data.key
-      router.push({name: 'HomeView'})
+      router.push({ name: 'HomeView' })
     })
     .catch((error) => console.log('로그인 실패!', error))
-
   }
 
+  // 로그아웃 폼
+  const logOut = function () {
+    token.value = null
+    router.push({ name: 'LoginView' })
+    console.log('로그아웃 성공!')
+  }
 
-  return { articles, API_URL, getArticles, isLogin, signUp, logIn, router, token }
-}, {persist: true})
+  // 스토어 초기화
+  const initialize = function () {
+    const storedToken = localStorage.getItem('token')
+    if (storedToken) {
+      token.value = storedToken
+    }
+  }
+
+  return { articles, API_URL, getArticles, isLogin, signUp, logIn, logOut, initialize, token }
+}, { persist: true })

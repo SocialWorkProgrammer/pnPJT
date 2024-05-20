@@ -29,3 +29,5 @@ class CustomRegisterSerializer(RegisterSerializer):
     adapter.save_user(request, user, self)        # 사용자 데이터 저장
     self.custom_signup(request, user)             # 추가적인 사용자 정의 가입 로직 처리
     return user
+  
+

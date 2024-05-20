@@ -1,10 +1,10 @@
 <template>
     <div>
-      <p>주의 : 분탕 시 영구차단임 </p>
-      <form @submit="createComment">
+      <p>댓글 작성란입니다.</p>
+      <form @submit="createComment" class="comment">
         <div>
           <label for="content">내용 : </label>
-          <textarea v-model.trim="content" id="content"></textarea>
+          <input v-model.trim="content" id="content"></input>
         </div>
         <input type="submit">
       </form>
@@ -25,7 +25,7 @@
   const createComment = function () {
     axios({
       method: 'post',
-      url: `${store.API_URL}/community/article/${route.params.id}/comment/create/`,
+      url: `${store.API_URL}/community/article/${route.params.id}/comment/`,
       data: {
         content: content.value
       },
@@ -35,7 +35,7 @@
     })
       .then((response) => {
         console.log(response.data)
-        router.push({ name: 'DetailView' })
+        // router.push({ name: 'DetailView' })
       })
       .catch((error) => {
         console.log(error)
@@ -44,7 +44,10 @@
   
   </script>
   
-  <style>
-  
+  <style scoped>
+  .comment{
+    border: 1px solid black;
+    
+  }
   </style>
   

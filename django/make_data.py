@@ -18,10 +18,12 @@ class User(AbstractBaseUser):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 """
-
 from django.conf import settings
 import random
 import requests
+from django.contrib.auth.hashers import make_password
+
+
 
 first_name_samples = '김이박최정강조윤장임'
 middle_name_samples = '민서예지도하주윤채현지'
@@ -121,7 +123,7 @@ with open(save_dir, 'w', encoding="utf-8") as f:        # JSON 파일 생성하�
             'age': random.randint(1, 100),  # 나이
             'money': random.randrange(0, 100000000, 100000),  # 현재 가진 금액
             'salary': random.randrange(0, 1500000000, 1000000),  # 연봉
-            'password': '1234',
+            'password': '1q2w3e4r!',
             'is_active': True,
             'is_staff': False,
             'is_superuser': False,

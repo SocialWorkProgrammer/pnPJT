@@ -3,6 +3,7 @@ import { createPinia } from 'pinia'
 import { createPersistedState } from 'pinia-plugin-persistedstate'
 import App from './App.vue'
 import router from './router'
+import { useBoardStore } from '@/stores/counter'
 
 // 부트스트랩 설치
 import "bootstrap/dist/css/bootstrap.min.css"
@@ -29,5 +30,8 @@ pinia.use(createPersistedState())
 app.use(pinia)
 app.use(router)
 app.use(vuetify) // Vuetify 사용
+
+const store = useBoardStore()
+store.initialize()
 
 app.mount('#app')

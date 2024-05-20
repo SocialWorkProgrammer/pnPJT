@@ -18,10 +18,6 @@
 import { RouterLink } from 'vue-router'
 import { onMounted } from 'vue'
 import { useBoardStore } from '@/stores/counter'
-const store = useBoardStore()
-onMounted(() => {
-  store.getArticles()
-})
 </script>
 
 <style scoped>

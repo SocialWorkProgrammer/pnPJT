@@ -1,14 +1,7 @@
 <script setup>
 import { RouterView, RouterLink } from 'vue-router'
 import { onMounted } from 'vue'
-import { useBoardStore } from '@/stores/counter'
-
-const store = useBoardStore()
-
-onMounted(() => {
-  store.getArticles()
-})
-
+import ArticleList from '@/components/articles/ArticleList.vue'
 </script>
 
 <template>

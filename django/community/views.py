@@ -36,7 +36,7 @@ def article(request, article_pk):
     if request.user.is_authenticated:
       if request.user == article.user:
         article.delete()
-        return Response(serializer.data, status = status.HTTP_204_NO_CONTENT)
+        return Response(status = status.HTTP_204_NO_CONTENT)
     else:
       return Response({ 'detail' : '권한 없음'}, status=status.HTTP_401_UNAUTHORIZED)
   
@@ -66,6 +66,8 @@ def comment(request, article_pk):
     else:
       return Response({ 'detail' : '로그인 필요'}, status=status.HTTP_401_UNAUTHORIZED)
 
+
+# 댓글 삭제 및 수정
 @api_view(['DELETE', 'PUT'])
 def comment_detail(request, article_pk, comment_pk):
   comment = get_object_or_404(Comment, pk=comment_pk)
