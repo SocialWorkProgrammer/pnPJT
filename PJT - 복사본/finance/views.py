@@ -18,9 +18,14 @@ def data(request):
   Saving_URL = f'http://finlife.fss.or.kr/finlifeapi/savingProductsSearch.json?auth={PRODUCT_API_KEY}&topFinGrpNo=020000&pageNo=1'
   
   # 예금 상품 데이터 가져오기 및 baseList와 optionList 추출
-  deposit_response = requests.get(Deposit_URL).json()
-  deposit_base_list = deposit_response.get('result').get('baseList')
-  deposit_option_list = deposit_response.get('result').get('optionList')
+  deposit_response = requests.get(Deposit_URL)
+  if deposit_response.status_code != 200:
+      return JsonResponse({'error': 'Failed to fetch deposit products', 'details': deposit_response.text}, status=deposit_response.status_code)
+
+  deposit_data = deposit_response.json()
+  deposit_base_list = deposit_data.get('result', {}).get('baseList', [])
+  deposit_option_list = deposit_data.get('result', {}).get('optionList', [])
+
 
   # 예금 상품 목록 정보 저장
   for item in deposit_base_list:
@@ -33,7 +38,7 @@ def data(request):
       'deposit_code' : item.get('fin_prdt_cd', -1),   # 예금 상품 코드
       'fin_co_no' : item.get('fin_co_no', -1),        # 금융 회사 번호
       'kor_co_nm' : item.get('kor_co_nm', -1),        # 금융 회사명
-      'name' : item.get('fin_prdt_nm', -1),           # 예금 상품명
+      'fin_prdt_nm' : item.get('fin_prdt_nm', -1),           # 예금 상품명
       'join_way' : item.get('join_way', -1),          # 가입 방법
       'mtrt_int' : item.get('mtrt_int', -1),          # 만기 후 이자
       'spcl_cnd' : item.get('spcl_cnd', -1),          # 우대 조건
@@ -66,9 +71,13 @@ def data(request):
 
 
 # 적금 상품 데이터 가져오기 및 baseList와 optionList 추출
-  saving_response = requests.get(Saving_URL).json()
-  saving_base_list = saving_response.get('result').get('baseList')
-  saving_option_list = saving_response.get('result').get('optionList')
+  saving_response = requests.get(Saving_URL)
+  if saving_response.status_code != 200:
+    return JsonResponse({'error': 'Failed to fetch saving products', 'details': saving_response.text}, status=saving_response.status_code)
+
+  saving_data = saving_response.json()
+  saving_base_list = saving_data.get('result', {}).get('baseList', [])
+  saving_option_list = saving_data.get('result', {}).get('optionList', [])
 
   # 적금 상품 목록 정보 저장
   for item in saving_base_list:
@@ -81,7 +90,7 @@ def data(request):
       'saving_code' : item.get('fin_prdt_cd', -1),    # 적금 상품 코드
       'fin_co_no' : item.get('fin_co_no', -1),        # 금융 회사 번호
       'kor_co_nm' : item.get('kor_co_nm', -1),        # 금융 회사명
-      'name' : item.get('fin_prdt_nm', -1),           # 예금 상품명
+      'fin_prdt_nm' : item.get('fin_prdt_nm', -1),           # 예금 상품명
       'join_way' : item.get('join_way', -1),          # 가입 방법
       'mtrt_int' : item.get('mtrt_int', -1),          # 만기 후 이자
       'spcl_cnd' : item.get('spcl_cnd', -1),          # 우대 조건
@@ -102,6 +111,7 @@ def data(request):
     # 새로운 적금 상품  
     saving_option = {
       'intr_rate_type_nm' : option.get('intr_rate_type_nm', '-1'),   # 이자율 유형명
+      'rsrv_type_nm' : option.get('rsrv_type_nm', '-1'),             # 적립 유형명
       'intr_rate' : option.get('intr_rate', -1),                     # 이자율
       'intr_rate2' : option.get('intr_rate2', -1),                   # 최고 우대 금리
       'save_trm' : option.get('save_trm', -1),                       # 저축 기간 (개월)
@@ -148,14 +158,14 @@ def saving_product_detail(request, saving_code):
 # 저축 기간별 예금 이자율 오름차순 정렬
 @api_view(['GET'])
 def deposit_ascend_order(request, save_trm):
-  deposits = DepositProducts.objects.filter(depositoption__save_trm=save_trm).order_by('depositoption__intr_rate')
+  deposits = DepositProducts.objects.filter(options__save_trm=save_trm).order_by('options__intr_rate')
   serializer = DepositProductDetailSerializer(deposits, many=True)
   return Response(serializer.data)
 
 # 저축 기간별 예금 이자율 내림차순 정렬
 @api_view(['GET'])
 def deposit_descend_order(request, save_trm):
-  deposits = DepositProducts.objects.filter(depositoption__save_trm=save_trm).order_by('-depositoption__intr_rate')
+  deposits = DepositProducts.objects.filter(options__save_trm=save_trm).order_by('-options__intr_rate')
   serializer = DepositProductDetailSerializer(deposits, many=True)
   return Response(serializer.data)
 
@@ -163,14 +173,14 @@ def deposit_descend_order(request, save_trm):
 # 저축 기간별 적금 이자율 오름차순 정렬
 @api_view(['GET'])
 def saving_ascend_order(request, save_trm):
-  savings = SavingProducts.objects.filter(savingoption__save_trm=save_trm).order_by('savingoption__intr_rate')
+  savings = SavingProducts.objects.filter(options__save_trm=save_trm).order_by('options__intr_rate')
   serializer = SavingProductDetailSerializer(savings, many=True)
   return Response(serializer.data)
 
 # 저축 기간별 적금 이자율 내림차순 정렬
 @api_view(['GET'])
 def saving_descend_order(request, save_trm):
-  savings = SavingProducts.objects.filter(savingoption__save_trm=save_trm).order_by('-savingoption__intr_rate')
+  savings = SavingProducts.objects.filter(options__save_trm=save_trm).order_by('-options__intr_rate')
   serializer = SavingProductDetailSerializer(savings, many=True)
   return Response(serializer.data)
 
@@ -178,18 +188,18 @@ def saving_descend_order(request, save_trm):
 
 # 특정 은행 예금 상품 가져오기
 @api_view(['GET'])
-def bank_deposit_products(request, kor_co_nm):
-  if DepositProducts.objects.filter(kor_co_nm=kor_co_nm).exists():
-    deposits = DepositProducts.objects.filter(kor_co_nm=kor_co_nm)
+def bank_deposit_products(request, fin_co_no):
+  if DepositProducts.objects.filter(fin_co_no=fin_co_no).exists():
+    deposits = DepositProducts.objects.filter(fin_co_no=fin_co_no)
     serializer = DepositProductsSerializer(deposits, many=True)
     return Response(serializer.data)
   
 
 # 특정 은행 적금 상품 가져오기
 @api_view(['GET'])
-def bank_saving_products(request, kor_co_nm):
-  if SavingProducts.objects.filter(kor_co_nm=kor_co_nm).exists():
-    savings = SavingProducts.objects.filter(kor_co_nm=kor_co_nm)
+def bank_saving_products(request, fin_co_no):
+  if SavingProducts.objects.filter(fin_co_no=fin_co_no).exists():
+    savings = SavingProducts.objects.filter(fin_co_no=fin_co_no)
     serializer = SavingProductsSerializer(savings, many=True)
     return Response(serializer.data)
   

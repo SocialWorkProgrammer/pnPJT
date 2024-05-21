@@ -3,7 +3,7 @@ from django.conf import settings
 # Create your models here.
 
 class DepositProducts(models.Model):
-    fin_prdt_cd = models.TextField()        # 금융 상품 코드
+    deposit_code = models.TextField()        # 금융 상품 코드
     fin_co_no = models.TextField()          # 금융 회사 코드
     kor_co_nm = models.TextField()          # 금융회사명
     fin_prdt_nm = models.TextField()        # 금융 상품명
@@ -19,8 +19,7 @@ class DepositProducts(models.Model):
 
 
 class DepositOptions(models.Model):
-    deposit = models.ForeignKey(DepositProducts, on_delete = models.CASCADE)    # 외래키
-    fin_prdt_cd = models.TextField()        # 금융상품코드
+    deposit = models.ForeignKey(DepositProducts, related_name='options', on_delete = models.CASCADE)    # 외래키
     intr_rate_type_nm = models.CharField(max_length=100)                        # 저축금리 유형명
     intr_rate = models.FloatField()                                             # 저축금리
     intr_rate2 = models.FloatField()                                            # 최고우대금리
@@ -28,7 +27,8 @@ class DepositOptions(models.Model):
 
 
 class SavingProducts(models.Model):
-    fin_prdt_cd = models.TextField()        # 금융 상품 코드
+    saving_code = models.TextField()        # 금융 상품 코드
+    fin_co_no = models.TextField()          # 금융 회사 코드
     kor_co_nm = models.TextField()          # 금융회사명
     fin_prdt_nm = models.TextField()        # 금융 상품명
     join_way = models.TextField()           # 가입 방법
@@ -40,7 +40,7 @@ class SavingProducts(models.Model):
     contract_user = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='sign_up_savings')    # 가입자
 
 class SavingOptions(models.Model):
-    saving = models.ForeignKey(SavingProducts, on_delete = models.CASCADE)     # 외래키
+    saving = models.ForeignKey(SavingProducts, related_name='options', on_delete = models.CASCADE)     # 외래키
     intr_rate_type_nm = models.CharField(max_length=100)                        # 저축 금리 유형명
     rsrv_type_nm = models.CharField(max_length=100)                             # 적립 유형명
     save_trm = models.IntegerField()                                            # 저축 기간(개월)
