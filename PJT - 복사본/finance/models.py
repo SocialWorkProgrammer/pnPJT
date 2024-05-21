@@ -14,16 +14,16 @@ class DepositProducts(models.Model):
     join_member = models.TextField()        # 가입 대상
     etc_note = models.TextField()           # 기타 유의사항
     max_limit = models.IntegerField(null=True, blank=True)       # 최고한도
-    contract_user = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='sign_up_deposits')   # 가입자
+    contract_user = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='contract_deposits')   # 가입자
 
 
 
 class DepositOptions(models.Model):
     deposit = models.ForeignKey(DepositProducts, related_name='options', on_delete = models.CASCADE)    # 외래키
     intr_rate_type_nm = models.CharField(max_length=100)                        # 저축금리 유형명
-    intr_rate = models.FloatField()                                             # 저축금리
-    intr_rate2 = models.FloatField()                                            # 최고우대금리
-    save_trm = models.IntegerField()                                            # 저축기간(단위:개월)
+    intr_rate = models.FloatField(blank=True, null=True)                                             # 저축금리
+    intr_rate2 = models.FloatField(blank=True, null=True)                                            # 최고우대금리
+    save_trm = models.IntegerField(blank=True, null=True)                                            # 저축기간(단위:개월)
 
 
 class SavingProducts(models.Model):
@@ -37,12 +37,12 @@ class SavingProducts(models.Model):
     join_member = models.TextField()        # 가입 대상
     etc_note = models.TextField()           # 기타 유의사항
     max_limit = models.IntegerField(null=True, blank=True)      # 최고한도
-    contract_user = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='sign_up_savings')    # 가입자
+    contract_user = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='contract_savings')    # 가입자
 
 class SavingOptions(models.Model):
     saving = models.ForeignKey(SavingProducts, related_name='options', on_delete = models.CASCADE)     # 외래키
     intr_rate_type_nm = models.CharField(max_length=100)                        # 저축 금리 유형명
     rsrv_type_nm = models.CharField(max_length=100)                             # 적립 유형명
-    save_trm = models.IntegerField()                                            # 저축 기간(개월)
-    intr_rate = models.FloatField()                                             # 저축금리
-    intr_rate2 = models.FloatField()                                            # 최고우대금리
+    save_trm = models.IntegerField(blank=True, null=True)                                            # 저축 기간(개월)
+    intr_rate = models.FloatField(blank=True, null=True)                                             # 저축금리
+    intr_rate2 = models.FloatField(blank=True, null=True)                                            # 최고우대금리

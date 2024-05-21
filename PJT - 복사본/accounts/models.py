@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from allauth.account.adapter import DefaultAccountAdapter
+from finance.models import DepositProducts, SavingProducts
 
 # Create your models here.
 class User(AbstractUser):
@@ -10,9 +11,12 @@ class User(AbstractUser):
     age = models.IntegerField(blank=True, null=True)                    # 유저 나이
     money = models.IntegerField(blank=True, null=True)                  # 유저 예산
     salary = models.IntegerField(blank=True, null=True)                 # 유저 월급
+    deposit_period = models.IntegerField(blank=True, null=True)         # 희망 예금 가입 기간
+    saving_period = models.IntegerField(blank=True, null=True)         # 희망 적금 가입 기간
     # 가입한 상품 목록 리스트를 ,로 구분된 문자열로 저장함      
     financial_products = models.TextField(blank=True, null=True)        # 유저 가입 상품 목록 리스트
-
+    sign_up_deposits = models.ManyToManyField(DepositProducts, related_name='users', blank=True)
+    sign_up_savings = models.ManyToManyField(SavingProducts, related_name='users', blank=True)
     # superuser fields
     is_active = models.BooleanField(default=True)                       # 활동 여부
     is_staff = models.BooleanField(default=False)                       # 부매니저? 여부
@@ -36,8 +40,11 @@ class CustomAccountAdapter(DefaultAccountAdapter):
         age = data.get("age")
         money = data.get("money")
         salary = data.get("salary")
+        deposit_period = data.get("deposit_period")
+        saving_period = data.get("saving_period")
         financial_product = data.get("financial_products")
-
+        sign_up_deposits = data.get("sign_up_deposits")
+        sign_up_savings = data.get("sign_up_savings")
         user_email(user, email)
         user_username(user, username)
         if first_name:
@@ -52,12 +59,24 @@ class CustomAccountAdapter(DefaultAccountAdapter):
             user.money = money
         if salary:
             user.salary = salary
+        if deposit_period:
+            user.deposit_period = deposit_period
+        if saving_period:
+            user.saving_period = saving_period
         if financial_product:
             financial_products = user.financial_products.split(',')     # 기존 financial_products 필드를 리스트로 만들기
             financial_products.append(financial_product)        # 새로운 financial_product 값을 리스트에 추가
             if len(financial_products) > 1:
                 financial_products = ','.join(financial_products) # 리스트를 다시 문자열로
-            user_field(user, "financial_products", financial_products)  # 업데이트 된 financial products 값을 사용자 객체에 설정 
+            user_field(user, "financial_products", financial_products)  # 업데이트 된 financial products 값을 사용자 객체에 설정
+        if sign_up_deposits:
+            for deposit_code in sign_up_deposits:
+                deposit = DepositProducts.objects.get(pk=deposit_code)
+                user.sign_up_deposits.add(deposit)
+        if sign_up_savings:
+            for saving_code in sign_up_savings:
+                saving = SavingProducts.objects.get(pk=saving_code)
+                user.sign_up_savings.add(saving) 
         if "password1" in data:
             user.set_password(data["password1"])
         else:
