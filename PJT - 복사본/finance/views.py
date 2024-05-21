@@ -230,7 +230,7 @@ def signup_deposit(request, deposit_code):
         return Response({'detail':'상품 추가'}, status=status.HTTP_200_OK)
     else:
       # 사용자가 이미 포함되어 있는 경우
-      return Response({'detail':'이미 가입했다'}, staus=status.HTTP_400_BAD_REQUEST)
+      return Response({'detail':'이미 가입했다'}, status=status.HTTP_400_BAD_REQUEST)
     
   # DELETE일 때 사용자가 예금상품 객체에 포함되어 있는 경우 삭제
   elif request.method == 'DELETE':
@@ -268,7 +268,7 @@ def signup_saving(request, saving_code):
         return Response({'detail':'상품 추가'}, status=status.HTTP_200_OK)
     else:
       # 사용자가 이미 포함되어 있는 경우
-      return Response({'detail':'이미 가입했다'}, staus=status.HTTP_400_BAD_REQUEST)
+      return Response({'detail':'이미 가입했다'}, status=status.HTTP_400_BAD_REQUEST)
     
   # DELETE일 때 사용자가 예금상품 객체에 포함되어 있는 경우 삭제
   elif request.method == 'DELETE':
@@ -303,10 +303,10 @@ def product_recommend_period(request):
   max_period = desire_deposit_period + 2
 
   # 희망 조건에 맞는 예금 상품 필터링
-  deposit_product = DepositProducts.objects.filter(depositoption__save_trm__lte=max_period)
+  deposit_product = DepositProducts.objects.filter(options__save_trm__lte=max_period)
 
   # 중복 제거 및 상위 10개 상품 선택
-  deposit_product = list(set(deposit_product.order_by("-depositoption__intr_rate")[:10]))
+  deposit_product = list(set(deposit_product.order_by("-options__intr_rate")[:10]))
 
   # 사용자의 희망 적금 기간 가져오기
   desire_saving_period = user.saving_period
@@ -319,10 +319,10 @@ def product_recommend_period(request):
   max_saving_period = desire_saving_period + 2
 
   # 희망 조건에 맞는 적금 상품 필터링
-  saving_product = SavingProducts.objects.filter(savingoption__save_trm_lte=max_saving_period)
+  saving_product = SavingProducts.objects.filter(options__save_trm=max_saving_period)
 
   # 중복 제거 및 상위 10개 상품 선택
-  saving_product = list(set(saving_product.order_by("-savingoption__intr_rate")[:10]))
+  saving_product = list(set(saving_product.order_by("-options__intr_rate")[:10]))
 
   # 필터링 된 예금 및 적금 상품 직렬화
   depositserializers = DepositProductDetailSerializer(deposit_product, many=True)
