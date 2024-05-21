@@ -61,6 +61,6 @@ class SignupSavingSerializer(serializers.ModelSerializer):
     savingoption_set = SavingOptionsSerializer(many=True, read_only=True)
     class Meta:
         model = SavingProducts
-        fields = ('saving_code','name','kor_co_nm', 'savingoption_set')
+        fields = ('saving_code','fin_prdt_nm','kor_co_nm', 'savingoption_set')
     # Saving 모델에서 'saving_code', 'name', 'kor_co_nm' 필드와 함께
     # SavingOptionsSerializer로 시리얼라이즈된 'savingoption_set' 필드를 포함합니다.

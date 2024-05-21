@@ -203,6 +203,7 @@ def bank_saving_products(request, fin_co_no):
     serializer = SavingProductsSerializer(savings, many=True)
     return Response(serializer.data)
   
+
 # 예금 상품 가입, 해지
 @api_view(['GET', 'POST', 'DELETE'])
 def signup_deposit(request, deposit_code):
@@ -218,17 +219,17 @@ def signup_deposit(request, deposit_code):
     serializer = SignupDepositSerializer(deposit_product)
     return Response(serializer.data)
   
-  # POST일 때 사용자가 예금상품 객체에 포함되지 않은 경우 추가
+  # POST일 때 예금상품이 사용자 가입 상품 목록에 포함되지 않은 경우 추가
   elif request.method == 'POST':
-    # 사용자가 contract_user에 포함되지 않은 경우
+    # 해당 예금상품을 사용자가 가입하지 않은 경우
     if deposit_product not in request.user.sign_up_deposits.all():
-      request.user.sign_up_deposits.add(deposit_product)   # 사용자 추가
+      request.user.sign_up_deposits.add(deposit_product)   # 사용자 예금상품 목록에 상품을 추가
       return Response({'detail': '상품 추가'}, status=status.HTTP_200_OK)
     else:
-    # 사용자가 이미 포함되어 있는 경우
+    # 예금상품이 이미 가입되어 있는 경우
        return Response({'detail': '이미 가입했다'}, status=status.HTTP_400_BAD_REQUEST)
     
-  # DELETE일 때 사용자가 예금상품 객체에 포함되어 있는 경우 삭제
+  # DELETE일 때 예금상품이 사용자 예금상품 목록에 추가되어 있는 경우 삭제
   elif request.method == 'DELETE':
     if deposit_product in request.user.sign_up_deposits.all():
         request.user.sign_up_deposits.remove(deposit_product)  # 사용자 제거
@@ -252,24 +253,20 @@ def signup_saving(request, saving_code):
     serializer = SignupSavingSerializer(saving_product)
     return Response(serializer.data)
   
-  # POST일 때 사용자가 적금상품 객체에 포함되지 않은 경우 추가
+  # POST일 때 적금상품이 사용자 가입 상품 목록에 포함되지 않은 경우 추가
   elif request.method == 'POST':
-    # 사용자가 contract_user에 포함되지 않은 경우
-    if request.user not in saving_product.contract_user.all():
-      saving_product.contract_user.add(request.user)   # 사용자 추가
-      # 적금 상품 객체를 요청 데이터와 함께 부분적으로 직렬화
-      serializer = SignupSavingSerializer(saving_product, data=request.data, partial=True)
-      if serializer.is_valid(raise_exception=True):
-        serializer.save()
-        return Response({'detail':'상품 추가'}, status=status.HTTP_200_OK)
+    # 해당 적금상품을 사용자가 가입하지 않은 경우
+    if saving_product not in request.user.sign_up_savings.all():
+      request.user.sign_up_savings.add(saving_product)   # 사용자 적금상품 목록에 상품을 추가
+      return Response({'detail': '상품 추가'}, status=status.HTTP_200_OK)
     else:
-      # 사용자가 이미 포함되어 있는 경우
-      return Response({'detail':'이미 가입했다'}, status=status.HTTP_400_BAD_REQUEST)
+    # 적금상품이 이미 가입되어 있는 경우
+      return Response({'detail': '이미 가입했다'}, status=status.HTTP_400_BAD_REQUEST)
     
-  # DELETE일 때 사용자가 예금상품 객체에 포함되어 있는 경우 삭제
+  # DELETE일 때 적금상품이 사용자 예금상품 목록에 추가되어 있는 경우 삭제
   elif request.method == 'DELETE':
-    if request.user in saving_product.contract_user.all():
-      saving_product.contract_user.remove(request.user)    # 사용자 제거
+    if saving_product in request.user.sign_up_savings.all():
+      request.user.sign_up_savings.remove(saving_product)  # 사용자 제거
       return Response({"detail" : "삭제 완료"}, status=status.HTTP_204_NO_CONTENT)
     else:
       # 사용자가 포함되어 있지 않은 경우

@@ -1,8 +1,10 @@
 from django.shortcuts import render
 import numpy as np
 import matplotlib.pyplot as plt
+import io
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from django.http import HttpResponse
 from rest_framework import status
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
@@ -54,52 +56,63 @@ def product_histogram(request, username):
         # 사용자 정보 가져오기
         user = request.user
         
-        # 사용자가 가입한 예금 및 적금 상품의 옵션 가져오기
-        deposit_options = DepositOptions.objects.filter(deposit__contract_user=user)
-        saving_options = SavingOptions.objects.filter(saving__contract_user=user)
+        # 사용자가 가입한 예금 및 적금 상품 가져오기
+        deposit_products = user.sign_up_deposits.all()
+        saving_products = user.sign_up_savings.all()
         
-        # 예금 상품과 적금 상품의 저축금리와 최고우대금리 데이터 가져오기
-        deposit_products = deposit_options.values_list('deposit__fin_prdt_nm', flat=True)
-        deposit_intr_rates = list(deposit_options.values_list('intr_rate', flat=True))
-        deposit_intr_rates2 = list(deposit_options.values_list('intr_rate2', flat=True))
+        # 예금 상품과 적금 상품의 이자율과 최고 우대금리 데이터 가져오기
+        deposit_intr_rates = [dp.intr_rate for dp in deposit_products]
+        deposit_intr_rates2 = [dp.intr_rate2 for dp in deposit_products]
         
-        saving_products = saving_options.values_list('saving__fin_prdt_nm', flat=True)
-        saving_intr_rates = list(saving_options.values_list('intr_rate', flat=True))
-        saving_intr_rates2 = list(saving_options.values_list('intr_rate2', flat=True))
+        saving_intr_rates = [sp.intr_rate for sp in saving_products]
+        saving_intr_rates2 = [sp.intr_rate2 for sp in saving_products]
+        
+        # 예금 상품과 적금 상품 이름 리스트
+        deposit_names = [dp.fin_prdt_nm for dp in deposit_products]
+        saving_names = [sp.fin_prdt_nm for sp in saving_products]
+        all_product_names = deposit_names + saving_names
         
         # 플롯 생성
-        plt.figure(figsize=(12, 6))
+        fig, ax = plt.subplots(figsize=(12, 6))
         
         # 예금 상품의 히스토그램
-        plt.bar(np.arange(len(deposit_intr_rates)), deposit_intr_rates, width=0.35, label='Deposit Interest Rate')
-        plt.bar(np.arange(len(deposit_intr_rates))+0.35, deposit_intr_rates2, width=0.35, label='Deposit Max Preferential Rate')
+        bar_width = 0.35
+        index = np.arange(len(all_product_names))
+        
+        deposit_len = len(deposit_intr_rates)
+        ax.bar(index[:deposit_len], deposit_intr_rates, bar_width, label='Deposit Interest Rate')
+        ax.bar(index[:deposit_len] + bar_width, deposit_intr_rates2, bar_width, label='Deposit Max Preferential Rate')
         
         # 적금 상품의 히스토그램
-        plt.bar(np.arange(len(saving_intr_rates)), saving_intr_rates, width=0.35, label='Saving Interest Rate')
-        plt.bar(np.arange(len(saving_intr_rates))+0.35, saving_intr_rates2, width=0.35, label='Saving Max Preferential Rate')
+        saving_offset = deposit_len
+        ax.bar(index[saving_offset:saving_offset + len(saving_intr_rates)], saving_intr_rates, bar_width, label='Saving Interest Rate')
+        ax.bar(index[saving_offset:saving_offset + len(saving_intr_rates)] + bar_width, saving_intr_rates2, bar_width, label='Saving Max Preferential Rate')
         
         # x축 라벨 설정 예금 상품과 적금 상품의 상품명이 x축에 나타나도록 설정
-        plt.xticks(np.arange(len(deposit_intr_rates)) + 0.35 / 2, list(deposit_products) + list(saving_products))
+        ax.set_xticks(index + bar_width / 2)
+        ax.set_xticklabels(all_product_names, rotation=45, ha='right')
         
         # y축 라벨 설정
-        plt.yticks(np.arange(0, 5, 0.5))
+        ax.set_yticks(np.arange(0, max(deposit_intr_rates + deposit_intr_rates2 + saving_intr_rates + saving_intr_rates2) + 1, 0.5))
         
         # x축, y축 라벨 설정
-        plt.xlabel('Product')
-        plt.ylabel('Rate')
+        ax.set_xlabel('Product')
+        ax.set_ylabel('Rate')
         
         # 제목 설정
-        plt.title('Interest Rate Histogram')
+        ax.set_title('Interest Rate Histogram')
         
         # 범례 설정
-        plt.legend(loc='upper center')
+        ax.legend(loc='upper center')
         
         # 그리드 설정
-        plt.grid(True)
+        ax.grid(True)
         
-        # 플롯 출력
-        plt.show()
+        # 플롯을 이미지로 저장
+        buf = io.BytesIO()
+        plt.tight_layout()
+        plt.savefig(buf, format='png')
+        buf.seek(0)
         
-        return Response({"message": "Histogram generated successfully."}, status=status.HTTP_200_OK)
+        return HttpResponse(buf, content_type='image/png')
     return Response(status=status.HTTP_400_BAD_REQUEST)
-

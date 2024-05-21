@@ -28,7 +28,7 @@ urlpatterns = [
     path('deposit/searching/<str:fin_co_no>/', views.bank_deposit_products),    # 은행별 예금상품 필터링- 정상
     path('saving/searching/<str:fin_co_no>/', views.bank_saving_products),    # 은행별 적금상품 필터링- 정상
     path('deposit/signup_deposit/<str:deposit_code>/', views.signup_deposit),          # 예금상품 등록, 해지
-    path('saving/signup_saving/', views.signup_saving),             # 적금상품 등록, 해지
+    path('saving/signup_saving/<str:saving_code>/', views.signup_saving),             # 적금상품 등록, 해지
     path('recommend/product_recommend_period/', views.product_recommend_period)     # 희망 예치 기간에 맞는 예금 및 적금 상품 추천
 
 
