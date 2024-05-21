@@ -1,6 +1,5 @@
 <template>
     <div>
-        <h1>DetailView</h1>
         <div v-if="article">
             <p>제목 : {{ article.title }}</p>
             <p>내용 : {{ article.content }}</p>
@@ -13,12 +12,13 @@
                 :key="article.id"
                 :comment = "comment" />
             <CreateCommentForm />
+            <p>{{ route.params }}</p>
             <v-btn
                 class="mr-2"
                 size="small"
                 variant="tonal"
                 color="green"
-                :to="{ name: 'ArticleUpdate', params: {id: article.id}}">
+                @click="UpdateArticle">
                 게시글 수정
             </v-btn>
             <v-btn
@@ -60,6 +60,9 @@ onMounted(() => {
         console.log('세부 게시물을 가져오는 데 실패헀다!', error)
     })
 })
+  const UpdateArticle = () => {
+      router.push({ name: 'ArticleUpdate', params: { id: route.params.id }})
+    }
 
   const deleteArticle = () => {
     if (window.confirm('정말 삭제하시겠습니까?')) {

@@ -7,6 +7,9 @@ import LoginView from '@/views/HomeView/LoginView.vue'
 import SignUpView from '@/views/HomeView/SignUpView.vue'
 import MapView from '@/views/FunctionView/MapView.vue'
 import ExchangeView from '@/views/FunctionView/ExchangeView.vue'
+import MainView from '@/views/HomeView/MainView.vue'
+import ArticleUpdate from '@/components/articles/ArticleUpdate.vue'
+import CommentUpdate from '@/components/comments/CommentUpdate.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,10 +18,11 @@ const router = createRouter({
       // 메인페이지
       path: '/',
       children: [
-        {path: '', name: 'HomeView', component: HomeView},
+        // {path: '', name: 'HomeView', component: HomeView},
         {path: 'login/', name: 'LoginView', component: LoginView},
         {path: 'signup/', name: 'SignUpView', component: SignUpView},
         {path: 'exchange/', name: 'ExchangeView', component: ExchangeView},
+        {path: '', name: 'MainView', component: MainView},
       ]
     },
     {
@@ -28,6 +32,8 @@ const router = createRouter({
         {path: '', name: 'ArticleView', component: ArticleView},
         {path : 'create/', name: "CreateArticleView", component: CreateArticleView},
         {path : 'article/:id/', name: "DetailView", component: DetailView},
+        {path : 'article/:id/', name: "ArticleUpdate", component: ArticleUpdate},
+        {path : 'article/:id/comment/:commentId', name: "CommentUpdate", component: CommentUpdate},
       ]
     },
     {

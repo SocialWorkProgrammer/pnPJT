@@ -2,8 +2,8 @@
     <div class="article">
         <RouterLink
         :to="{ name: 'DetailView', params: {id: article.id}}" class="custom-link">{{article.title}}</RouterLink>
-        <p>{{article}}</p>
-        <!-- <p>{{ article.user.username }}</p> -->
+        <!-- <p>{{article}}</p> -->
+        <p>{{ article.user.username }}</p>
         <hr>
         <!-- article serializer가 잘 나오는지 확인하는 용도 -->
         <!-- <p>{{ article }}</p> -->
