@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue'
+import { ref, computed, reactive } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
@@ -10,8 +10,9 @@ export const useBoardStore = defineStore('board', () => {
   const router = useRouter()
 
   const isLogin = computed(() => {
-    return token.value !== null
+    return token.value.length > 0 ? true : false
   })
+  // 빈 문자열이 아니다 -> 
 
   // 게시글 가져오기
   const getArticles = function () {
@@ -52,6 +53,10 @@ export const useBoardStore = defineStore('board', () => {
   }
 
   // 로그인 폼
+
+  const state = reactive({
+    username: ref(null)
+  })
   const logIn = function (payload) {
     const { username, password } = payload
     axios({
@@ -64,7 +69,8 @@ export const useBoardStore = defineStore('board', () => {
     .then((response) => {
       console.log('로그인 성공!', response.data.key)
       token.value = response.data.key
-      router.push({ name: 'HomeView' })
+      state.username = username
+      router.push({ name: 'MainView' })
     })
     .catch((error) => console.log('로그인 실패!', error))
   }
@@ -72,7 +78,7 @@ export const useBoardStore = defineStore('board', () => {
   // 로그아웃 폼
   const logOut = function () {
     token.value = null
-    router.push({ name: 'LoginView' })
+    router.push({ name: 'MainView' })
     console.log('로그아웃 성공!')
   }
 
@@ -84,5 +90,5 @@ export const useBoardStore = defineStore('board', () => {
     }
   }
 
-  return { articles, API_URL, getArticles, isLogin, signUp, logIn, logOut, initialize, token }
+  return { state, articles, API_URL, getArticles, isLogin, signUp, logIn, logOut, initialize, token }
 }, { persist: true })

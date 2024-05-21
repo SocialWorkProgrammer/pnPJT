@@ -22,7 +22,7 @@ const logout = function () {
       .then((response) => {
         console.log(response.data)
         store.token= ''
-        router.push({name : 'HomeView'})
+        router.push({name : 'MainView'})
       })
       .catch((error) => {
         console.log(error)

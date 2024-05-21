@@ -21,8 +21,8 @@
       </div>
       <div class="col-4 d-flex justify-content-center align-items-center">
         <router-link to="/community" class="text-center image">
-          <img src="@/assets/커뮤니티.png" class="img-fluid my-image" alt="커뮤니티">
-          <div class="label">커뮤니티</div>
+          <img src="@/assets/금융상품.png" class="img-fluid my-image" alt="커뮤니티">
+          <div class="label">금융상품</div>
         </router-link>
       </div>
       <div class="col-4 d-flex justify-content-center align-items-center">

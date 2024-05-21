@@ -10,6 +10,11 @@ import ExchangeView from '@/views/FunctionView/ExchangeView.vue'
 import MainView from '@/views/HomeView/MainView.vue'
 import ArticleUpdate from '@/components/articles/ArticleUpdate.vue'
 import CommentUpdate from '@/components/comments/CommentUpdate.vue'
+import DepositView from '@/views/FinanceView/DepositView.vue'
+import SavingView from '@/views/FinanceView/SavingView.vue'
+import DepositDetailView from '@/views/FinanceView/DepositDetailView.vue'
+import SavingDetailView from '@/views/FinanceView/SavingDetailView.vue'
+import ProfileView from '@/views/HomeView/ProfileView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,6 +28,7 @@ const router = createRouter({
         {path: 'signup/', name: 'SignUpView', component: SignUpView},
         {path: 'exchange/', name: 'ExchangeView', component: ExchangeView},
         {path: '', name: 'MainView', component: MainView},
+        {path: 'profile/', name: 'ProfileView', component: ProfileView},
       ]
     },
     {
@@ -43,21 +49,44 @@ const router = createRouter({
         {path: '', name: 'MapView', component: MapView},
       ]
     },
+    {
+      // 금융
+      path: '/finance',
+      children: [
+        {path: '', name: 'DepositView', component: DepositView},
+        {path: 'saving', name: 'SavingView', component: SavingView},
+        {path: ':id/', name:'DepositDetailView', component: DepositDetailView},
+        {path: 'saving/:id', name:'SavingDetailView', component: SavingDetailView},
+      ]
+    },
   ]
 })
 
-// import { useBoardStore } from '@/stores/counter'
+import { useBoardStore } from '@/stores/counter'
 
-// router.beforeEach((to, from) => {
-//   const store = useBoardStore()
-//   if (to.name === 'Articleview' && store.isLogin === false) {
-//     window.alert('로그인해주세요')
-//     return { name : 'LoginView'}
-//   }
-//   if ((to.name === 'SignUpView' || to.name === 'LoginView') && (store.isLogin))
-//   {window.alert('이미 로그인이 된 상태입니다.')
-//   return { name: 'HomeView'}
-// }
-// })
+router.beforeEach((to, from, next) => {
+  const store = useBoardStore()
+  
+  if (to.name === 'MainView' && !store.isLogin) {
+    window.alert('로그인해주세요')
+    next({ name: 'LoginView' })
+  } else if (to.name === 'LoginView' && store.isLogin) {
+    window.alert('이미 로그인이 된 상태입니다.')
+    next({ name: 'MainView' })
+  } else {
+    next() // 통과
+  }
+})
 
 export default router
+
+// 로컬 스토리지 쪽에서는 null을 ""로 저장한다. 
+// 이유 : 로컬 스토리지는 문자열로 저장하기 때문에, null값을 " null "로 인식해서 빈 문자열로 저장하기 때문
+// 그렇기 때문에 원래는 return token !== null으로 썼었는데,
+// 실제 할 때는 return token !== ""으로 써야 한다.
+// 아니면 아래 코드처럼 삼항식을 이용해 lenght가 0 이상이면 true(로그인 되어있는 상태), 아니면 false(로그인이 되어있지 않은 상태)
+// 로 인식시키면 된다.
+//const isLogin = computed(() => {
+//  return token.value.length > 0 ? true : false
+//  return token !== null
+//  })

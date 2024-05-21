@@ -45,7 +45,8 @@ SP_URL = 'http://finlife.fss.or.kr/finlifeapi/savingProductsSearch.json'
 API_KEY = '142dc84483391d09064354c8ee7e7f30'
 
 # 금융상품 코드 저장 리스트
-financial_products = []
+sign_up_deposits = []
+sign_up_savings = []
 
 # API 요청 파라미터
 params = {
@@ -60,20 +61,21 @@ response = requests.get(DP_URL, params=params).json()
 baseList = response.get('result').get('baseList')  # 상품 목록
 
 for product in baseList:
-    financial_products.append(product['fin_prdt_cd'])
+    sign_up_deposits.append(product['fin_prdt_cd'])
 
 # 적금 목록 저장
 response = requests.get(SP_URL, params=params).json()
 baseList = response.get('result').get('baseList')  # 상품 목록
 
 for product in baseList:
-    financial_products.append(product['fin_prdt_cd'])
+    sign_up_savings.append(product['fin_prdt_cd'])
 
 # JSON 파일 필드 키
 dict_keys = [
     'username',
     'gender',
-    'financial_products',
+    'sign_up_deposits',
+    'sign_up_savings',
     'age',
     'money',
     'salary',
@@ -114,15 +116,13 @@ with open(save_dir, 'w', encoding="utf-8") as f:        # JSON 파일 생성하�
             'username' : 'tester'+str(i),   # 로그인 시 입력할 유저 아이디
             'name': name_list[i],  # 유저 이름 랜덤 생성
             # 랜덤한 0~5개의 상품을 가입하도록 삽입됨
-            'financial_products': ','.join(
-                [
-                    random.choice(financial_products)
-                    for _ in range(random.randint(0, 5))
-                ]
-            ),  # 금융 상품 리스트
+            'sign_up_deposits': list(set([ random.randrange(1,39) for _ in range(2) ])),  # 가입 예금 상품 리스트(2개)
+            'sign_up_savings' : list(set([ random.randrange(1,63) for _ in range(2) ])),  # 가입 적금 상품 리스트(2개)
             'age': random.randint(1, 100),  # 나이
-            'money': random.randrange(0, 100000000, 100000),  # 현재 가진 금액
-            'salary': random.randrange(0, 1500000000, 1000000),  # 연봉
+            'money': random.randrange(10000000, 100000000, 1000000000),  # 현재 가진 금액
+            'salary': random.randrange(50000000, 1500000000, 100000000),  # 연봉
+            'deposit_period':random.choice([6, 12, 24, 36]), # 기간 랜덤
+            'saving_period':random.choice([6, 12, 24, 36]), # 기간 랜덤
             'password': '1q2w3e4r!',
             'is_active': True,
             'is_staff': False,

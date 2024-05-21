@@ -15,6 +15,7 @@
       </div>
       <div class="nav-mag">지도를 통해 전국의 은행을 검색할 수 있습니다.</div>
         <RouterLink class="navtext" :to="{ name: 'ExchangeView' }">[환율]</RouterLink>
+        <RouterLink class="navtext" :to="{ name: 'DepositView' }">[금융상품]</RouterLink>
     </nav>
   </div>
 </template>

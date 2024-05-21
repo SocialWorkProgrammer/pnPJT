@@ -1,11 +1,16 @@
 <template>
-  <div>
-    <h1>App.vue의 영역</h1>
-    <div>
-      <RouterLink :to="{ name: 'SignUpView' }">[회원가입]</RouterLink>
-      <RouterLink :to="{ name: 'LoginView'}">[로그인]</RouterLink>
-      <LogoutView />
+  <div class="row">
+    <div class="col-8"><h1>로고</h1></div>
+    <div class="account-form col-4">
+    <div v-if="store.isLogin">
+      <RouterLink :to="{ name: 'ProfileView'}"><p>어서오세요! {{ store.state.username }}</p></RouterLink>
+      <LogoutView class="menu-item" />
     </div>
+    <div v-else>
+      <RouterLink :to="{ name: 'SignUpView' }" class="menu-item">[회원가입]</RouterLink>
+      <RouterLink :to="{ name: 'LoginView'}" class="menu-item">[로그인]</RouterLink>
+    </div>
+</div>
     <Navbar />
     <RouterView />
   </div>
@@ -21,9 +26,18 @@ import LoginView from './views/HomeView/LoginView.vue'
 import LogoutView from '@/views/HomeView/LogoutView.vue'
 import Navbar from '@/components/functions/Navbar.vue'
 const store = useBoardStore()
+
+const user = store.getUser
 </script>
 
 <style scoped>
+.account-form {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
 
-
+.menu-item {
+  margin: 0 10px; /* 메뉴 아이템 간격 조정 */
+}
 </style>

@@ -60,6 +60,7 @@ onMounted(() => {
         console.log('세부 게시물을 가져오는 데 실패헀다!', error)
     })
 })
+  
   const UpdateArticle = () => {
       router.push({ name: 'ArticleUpdate', params: { id: route.params.id }})
     }
