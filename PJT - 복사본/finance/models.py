@@ -14,7 +14,6 @@ class DepositProducts(models.Model):
     join_member = models.TextField()        # 가입 대상
     etc_note = models.TextField()           # 기타 유의사항
     max_limit = models.IntegerField(null=True, blank=True)       # 최고한도
-    contract_user = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='contract_deposits')   # 가입자
 
 
 
@@ -37,7 +36,6 @@ class SavingProducts(models.Model):
     join_member = models.TextField()        # 가입 대상
     etc_note = models.TextField()           # 기타 유의사항
     max_limit = models.IntegerField(null=True, blank=True)      # 최고한도
-    contract_user = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='contract_savings')    # 가입자
 
 class SavingOptions(models.Model):
     saving = models.ForeignKey(SavingProducts, related_name='options', on_delete = models.CASCADE)     # 외래키

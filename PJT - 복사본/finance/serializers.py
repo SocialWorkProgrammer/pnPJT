@@ -5,7 +5,7 @@ from .models import DepositProducts, DepositOptions, SavingProducts, SavingOptio
 class DepositProductsSerializer(serializers.ModelSerializer):
     class Meta:
         model = DepositProducts
-        exclude = ('contract_user',)
+        fields = '__all__'
 
 class DepositSignupSerializer(serializers.ModelSerializer):
     class Meta:
@@ -29,7 +29,7 @@ class DepositProductDetailSerializer(serializers.ModelSerializer):
 class SavingProductsSerializer(serializers.ModelSerializer):
     class Meta:
         model = SavingProducts
-        exclude = ('contract_user',)
+        fields = '__all__'
 
 class SavingSignupSerializer(serializers.ModelSerializer):
     class Meta:

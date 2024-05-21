@@ -221,22 +221,18 @@ def signup_deposit(request, deposit_code):
   # POST일 때 사용자가 예금상품 객체에 포함되지 않은 경우 추가
   elif request.method == 'POST':
     # 사용자가 contract_user에 포함되지 않은 경우
-    if request.user not in deposit_product.contract_user.all():
-      deposit_product.contract_user.add(request.user)   # 사용자 추가
-      # 예금 상품 객체를 요청 데이터와 함께 부분적으로 직렬화
-      serializer = SignupDepositSerializer(deposit_product, data=request.data, partial=True)
-      if serializer.is_valid(raise_exception=True):
-        serializer.save()
-        return Response({'detail':'상품 추가'}, status=status.HTTP_200_OK)
+    if deposit_product not in request.user.sign_up_deposits.all():
+      request.user.sign_up_deposits.add(deposit_product)   # 사용자 추가
+      return Response({'detail': '상품 추가'}, status=status.HTTP_200_OK)
     else:
-      # 사용자가 이미 포함되어 있는 경우
-      return Response({'detail':'이미 가입했다'}, status=status.HTTP_400_BAD_REQUEST)
+    # 사용자가 이미 포함되어 있는 경우
+       return Response({'detail': '이미 가입했다'}, status=status.HTTP_400_BAD_REQUEST)
     
   # DELETE일 때 사용자가 예금상품 객체에 포함되어 있는 경우 삭제
   elif request.method == 'DELETE':
-    if request.user in deposit_product.contract_user.all():
-      deposit_product.contract_user.remove(request.user)    # 사용자 제거
-      return Response({"detail" : "삭제 완료"}, status=status.HTTP_204_NO_CONTENT)
+    if deposit_product in request.user.sign_up_deposits.all():
+        request.user.sign_up_deposits.remove(deposit_product)  # 사용자 제거
+        return Response({"detail": "삭제 완료"}, status=status.HTTP_204_NO_CONTENT)
     else:
       # 사용자가 포함되어 있지 않은 경우
       return Response({"detail":"가입한 상품이 아닙니다"}, status=status.HTTP_404_NOT_FOUND)
