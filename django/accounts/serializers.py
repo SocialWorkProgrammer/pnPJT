@@ -41,7 +41,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 class UserDetailSerializer(serializers.ModelSerializer):
   sign_up_deposits= SignupDepositSerializer(many=True)
-  sign_up_saving = SignupSavingSerializer(many=True)
+  sign_up_savings = SignupSavingSerializer(many=True)
   class Meta:
     model = User
     fields = '__all__'

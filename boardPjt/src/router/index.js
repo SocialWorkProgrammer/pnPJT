@@ -28,7 +28,7 @@ const router = createRouter({
         {path: 'signup/', name: 'SignUpView', component: SignUpView},
         {path: 'exchange/', name: 'ExchangeView', component: ExchangeView},
         {path: '', name: 'MainView', component: MainView},
-        {path: 'profile/', name: 'ProfileView', component: ProfileView},
+        {path: 'profile/:username/', name: 'ProfileView', component: ProfileView},
       ]
     },
     {

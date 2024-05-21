@@ -1,9 +1,9 @@
 <template>
   <div class="row">
-    <div class="col-8"><h1>로고</h1></div>
+    <div class="col-8"><h1>로고</h1></div>    
     <div class="account-form col-4">
     <div v-if="store.isLogin">
-      <RouterLink :to="{ name: 'ProfileView'}"><p>어서오세요! {{ store.state.username }}</p></RouterLink>
+      <RouterLink :to="{ name: 'ProfileView', params: {username : store.state.username }}"><p>어서오세요! {{ store.state.username }}</p></RouterLink>
       <LogoutView class="menu-item" />
     </div>
     <div v-else>
@@ -27,7 +27,6 @@ import LogoutView from '@/views/HomeView/LogoutView.vue'
 import Navbar from '@/components/functions/Navbar.vue'
 const store = useBoardStore()
 
-const user = store.getUser
 </script>
 
 <style scoped>
