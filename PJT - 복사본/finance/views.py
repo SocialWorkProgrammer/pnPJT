@@ -130,7 +130,7 @@ def data(request):
 @api_view(['GET'])
 def deposit_products(request):
   deposit_products = DepositProducts.objects.all()
-  serializers = DepositProductsSerializer(deposit_products, many=True)
+  serializers = DepositProductDetailSerializer(deposit_products, many=True)
   return Response(serializers.data)
 
 # 예금 상품 상세 정보-예금 상품 코드 입력
@@ -144,7 +144,7 @@ def deposit_product_detail(request, deposit_code):
 @api_view(['GET'])
 def saving_products(request):
   saving_products = SavingProducts.objects.all()
-  serializers = SavingProductsSerializer(saving_products, many=True)
+  serializers = SavingProductDetailSerializer(saving_products, many=True)
   return Response(serializers.data)
 
 # 적금 상품 상세 정보 - 적금 상품 코드 입력
