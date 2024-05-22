@@ -18,7 +18,6 @@
     <table>
       <thead>
         <tr>
-          <th>상품 코드</th>
           <th>금융회사명</th>
           <th>상품명</th>
           <th>6개월</th>
@@ -29,9 +28,10 @@
       </thead>
       <tbody>
         <tr v-for="product in filteredProducts" :key="product.saving_code">
-          <td>{{ product.saving_code }}</td>
-          <td>{{ product.kor_co_nm }}</td>
-          <td>{{ product.fin_prdt_nm }}</td>
+          <td><RouterLink
+          :to="{ name: 'SavingDetailView', params: {id: product.saving_code}}" class="custom-link">{{ product.kor_co_nm }}</RouterLink></td>
+          <td><RouterLink
+          :to="{ name: 'SavingDetailView', params: {id: product.saving_code}}" class="custom-link">{{ product.fin_prdt_nm }}</RouterLink></td>
           <td>{{ getInterestRate(product, 6) }}</td>
           <td>{{ getInterestRate(product, 12) }}</td>
           <td>{{ getInterestRate(product, 24) }}</td>
@@ -89,7 +89,7 @@ export default {
 
 <style scoped>
 .container {
-  max-width: 800px;
+  max-width: 1000px;
   margin: auto;
   padding: 20px;
 }
@@ -117,6 +117,17 @@ th, td {
 
 th {
   background-color: #f4f4f4;
+}
+
+.custom-link {
+  color: inherit; /* 기본 텍스트 색상을 사용 */
+  text-decoration: none; /* 밑줄 제거 */
+  display: block;
+
+  &:hover {
+    color: inherit; /* 마우스를 올렸을 때도 기본 텍스트 색상을 사용 */
+    text-decoration: none; /* 마우스를 올렸을 때도 밑줄 제거 */
+  }
 }
 
 .search-container {
@@ -160,5 +171,6 @@ label {
     font-size: 14px;
   }
 }
+
 
 </style>

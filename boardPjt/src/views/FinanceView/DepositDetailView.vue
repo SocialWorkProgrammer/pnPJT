@@ -10,6 +10,7 @@
       <p><strong>가입 대상:</strong> {{ product.join_member }}</p>
       <p><strong>기타 유의사항:</strong> {{ product.etc_note }}</p>
       <p><strong>최고 한도:</strong> {{ product.max_limit }}</p>
+      <button class="join-button" @click="joinProduct">이 상품 가입하기</button>
     </div>
     <div v-else class="loading">
       Loading...
@@ -39,6 +40,24 @@ onMounted(() => {
     console.log('예금 상품을 못 가져옴ㅠㅠ', error)
   })
 })
+
+// 상품 가입 로직
+const joinProduct = () => {
+  axios({
+    method: 'post',
+    url: `${store.API_URL}/finance/deposit/signup_deposit/${route.params.id}/`,
+    headers: {
+        Authorization: `Token ${store.token}`
+      }
+  })
+  .then((response) => {
+    console.log('상품 추가됨!', response)
+  })
+  .catch((error) => {
+    console.log('상품 추가 안됨ㅠㅠ', error)
+  })
+}
+
 </script>
 
 <style scoped>
@@ -81,6 +100,25 @@ strong {
   color: #999;
 }
 
+.join-button {
+  display: block;
+  width: 100%;
+  padding: 10px 20px;
+  margin-top: 20px;
+  background-color: #2980b9;
+  color: white;
+  font-size: 1.2em;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.join-button:hover {
+  background-color: #3498db;
+  transform: scale(1.05);
+}
 
 @media (max-width: 600px) {
   .container {
@@ -96,6 +134,10 @@ strong {
   }
 
   p {
+    font-size: 1em;
+  }
+
+  .join-button {
     font-size: 1em;
   }
 }

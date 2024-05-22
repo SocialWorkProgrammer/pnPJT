@@ -5,7 +5,7 @@ from .models import DepositProducts, DepositOptions, SavingProducts, SavingOptio
 class DepositProductsSerializer(serializers.ModelSerializer):
     class Meta:
         model = DepositProducts
-        exclude = ('contract_user',)
+        fields = '__all__'
 
 class DepositSignupSerializer(serializers.ModelSerializer):
     class Meta:
@@ -29,7 +29,7 @@ class DepositProductDetailSerializer(serializers.ModelSerializer):
 class SavingProductsSerializer(serializers.ModelSerializer):
     class Meta:
         model = SavingProducts
-        exclude = ('contract_user',)
+        fields = '__all__'
 
 class SavingSignupSerializer(serializers.ModelSerializer):
     class Meta:
@@ -53,7 +53,7 @@ class SignupDepositSerializer(serializers.ModelSerializer):
     depositoption_set = DepositOptionsSerializer(many=True, read_only=True)
     class Meta:
         model = DepositProducts
-        fields = ('deposit_code','name', 'kor_co_nm', 'depositoption_set')
+        fields = ('deposit_code','fin_prdt_nm', 'kor_co_nm', 'depositoption_set')
     # Deposit 모델에서 'deposit_code', 'name', 'kor_co_nm' 필드와 함께
      # DepositOptionsSerializer로 시리얼라이즈된 'depositoption_set' 필드를 포함합니다.
 
@@ -61,6 +61,6 @@ class SignupSavingSerializer(serializers.ModelSerializer):
     savingoption_set = SavingOptionsSerializer(many=True, read_only=True)
     class Meta:
         model = SavingProducts
-        fields = ('saving_code','name','kor_co_nm', 'savingoption_set')
+        fields = ('saving_code','fin_prdt_nm','kor_co_nm', 'savingoption_set')
     # Saving 모델에서 'saving_code', 'name', 'kor_co_nm' 필드와 함께
     # SavingOptionsSerializer로 시리얼라이즈된 'savingoption_set' 필드를 포함합니다.

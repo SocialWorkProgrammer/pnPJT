@@ -116,8 +116,8 @@ with open(save_dir, 'w', encoding="utf-8") as f:        # JSON 파일 생성하�
             'username' : 'tester'+str(i),   # 로그인 시 입력할 유저 아이디
             'name': name_list[i],  # 유저 이름 랜덤 생성
             # 랜덤한 0~5개의 상품을 가입하도록 삽입됨
-            'sign_up_deposits': list(set([ random.randrange(1,39) for _ in range(2) ])),  # 가입 예금 상품 리스트(2개)
-            'sign_up_savings' : list(set([ random.randrange(1,63) for _ in range(2) ])),  # 가입 적금 상품 리스트(2개)
+            'sign_up_deposits': list(set([ random.randrange(1,38) for _ in range(2) ])),
+            'sign_up_savings' : list(set([ random.randrange(1,62) for _ in range(random.randint(2, 3)) ])),
             'age': random.randint(1, 100),  # 나이
             'money': random.randrange(10000000, 100000000, 1000000000),  # 현재 가진 금액
             'salary': random.randrange(50000000, 1500000000, 100000000),  # 연봉

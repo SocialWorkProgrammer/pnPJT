@@ -1,7 +1,7 @@
 <!-- src/components/DepositProducts.vue -->
 <template>
   <div class="container">
-    <h1>정기예금 | <router-link :to="{name: 'SavingView'}">정기적금</router-link></h1>
+    <h1>정기예금 | <RouterLink :to="{name: 'SavingView'}">정기적금</RouterLink></h1>
     <div class="search-container">
     <label for="bank">은행을 선택하세요:</label>
     <select v-model="selectedBank" id="bank" class="custom-select">
@@ -18,7 +18,6 @@
     <table>
       <thead>
         <tr>
-          <th>상품 코드</th>
           <th>금융회사명</th>
           <th>상품명</th>
           <th>6개월</th>
@@ -30,7 +29,6 @@
       <tbody>
         <tr v-for="product in filteredProducts" :key="product.deposit_code">
           
-          <td>{{ product.deposit_code }}</td>
           <td><RouterLink
           :to="{ name: 'DepositDetailView', params: {id: product.deposit_code}}" class="custom-link">{{ product.kor_co_nm }}</RouterLink></td>
           <td><RouterLink
