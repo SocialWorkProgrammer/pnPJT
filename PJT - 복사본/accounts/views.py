@@ -1,7 +1,8 @@
 from django.shortcuts import render
 import numpy as np
 import matplotlib.pyplot as plt
-import io
+from matplotlib import font_manager, rc
+from io import BytesIO
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.http import HttpResponse
@@ -50,69 +51,45 @@ def user_detail(request, username):
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET'])
-def product_histogram(request, username):
-    if request.user.is_authenticated and request.user.username == username:
-        # 사용자 정보 가져오기
-        user = request.user
+# @api_view(['GET'])
+# def deposit_product_histogram(request, username):
+#     if request.user.is_authenticated and request.user.username == username:
+#         # 사용자 정보 가져오기
+#         user = request.user
         
-        # 사용자가 가입한 예금 및 적금 상품 가져오기
-        deposit_products = user.sign_up_deposits.all()
-        saving_products = user.sign_up_savings.all()
-        
-        # 예금 상품과 적금 상품의 이자율과 최고 우대금리 데이터 가져오기
-        deposit_intr_rates = [dp.intr_rate for dp in deposit_products]
-        deposit_intr_rates2 = [dp.intr_rate2 for dp in deposit_products]
-        
-        saving_intr_rates = [sp.intr_rate for sp in saving_products]
-        saving_intr_rates2 = [sp.intr_rate2 for sp in saving_products]
-        
-        # 예금 상품과 적금 상품 이름 리스트
-        deposit_names = [dp.fin_prdt_nm for dp in deposit_products]
-        saving_names = [sp.fin_prdt_nm for sp in saving_products]
-        all_product_names = deposit_names + saving_names
-        
-        # 플롯 생성
-        fig, ax = plt.subplots(figsize=(12, 6))
-        
-        # 예금 상품의 히스토그램
-        bar_width = 0.35
-        index = np.arange(len(all_product_names))
-        
-        deposit_len = len(deposit_intr_rates)
-        ax.bar(index[:deposit_len], deposit_intr_rates, bar_width, label='Deposit Interest Rate')
-        ax.bar(index[:deposit_len] + bar_width, deposit_intr_rates2, bar_width, label='Deposit Max Preferential Rate')
-        
-        # 적금 상품의 히스토그램
-        saving_offset = deposit_len
-        ax.bar(index[saving_offset:saving_offset + len(saving_intr_rates)], saving_intr_rates, bar_width, label='Saving Interest Rate')
-        ax.bar(index[saving_offset:saving_offset + len(saving_intr_rates)] + bar_width, saving_intr_rates2, bar_width, label='Saving Max Preferential Rate')
-        
-        # x축 라벨 설정 예금 상품과 적금 상품의 상품명이 x축에 나타나도록 설정
-        ax.set_xticks(index + bar_width / 2)
-        ax.set_xticklabels(all_product_names, rotation=45, ha='right')
-        
-        # y축 라벨 설정
-        ax.set_yticks(np.arange(0, max(deposit_intr_rates + deposit_intr_rates2 + saving_intr_rates + saving_intr_rates2) + 1, 0.5))
-        
-        # x축, y축 라벨 설정
-        ax.set_xlabel('Product')
-        ax.set_ylabel('Rate')
-        
-        # 제목 설정
-        ax.set_title('Interest Rate Histogram')
-        
-        # 범례 설정
-        ax.legend(loc='upper center')
-        
-        # 그리드 설정
-        ax.grid(True)
-        
-        # 플롯을 이미지로 저장
-        buf = io.BytesIO()
-        plt.tight_layout()
-        plt.savefig(buf, format='png')
-        buf.seek(0)
-        
-        return HttpResponse(buf, content_type='image/png')
-    return Response(status=status.HTTP_400_BAD_REQUEST)
+#         # 사용자가 가입한 예금 및 적금 상품 가져오기
+#         deposit_products = user.sign_up_deposits.all()
+
+#     product_names = []
+#     base_rates = []
+#     max_preferential_rates = []
+
+#     for product in deposit_products:
+#         product_names.append(product.fin_prdt_nm)
+#         for option in product.options.all():
+#             base_rates.append(option.intr_rate)
+#             max_preferential_rates.append(option.intr_rate2)
+
+#     # 한글 폰트 설정
+#         font_path = '/usr/share/fonts/truetype/nanum/NanumGothic.ttf'  # 이 경로는 시스템에 따라 다를 수 있습니다
+#         font_name = font_manager.FontProperties(fname=font_path).get_name()
+#         rc('font', family=font_name)
+
+#     fig, ax = plt.subplots()
+#     bar_width = 0.35
+#     index = range(len(product_names))
+
+#     bars1 = plt.bar(index, base_rates, bar_width, label='기초 금리')
+#     bars2 = plt.bar([i + bar_width for i in index], max_preferential_rates, bar_width, label='최고 우대금리 금리')
+
+#     plt.xlabel('상품명')
+#     plt.ylabel('금리')
+#     plt.title('가입한 상품 금리')
+#     plt.xticks([i + bar_width / 2 for i in index], product_names, rotation=45)
+#     plt.legend()
+
+#     buf = BytesIO()
+#     plt.savefig(buf, format='png')
+#     plt.close(fig)
+#     buf.seek(0)
+#     return HttpResponse(buf, content_type='image/png')

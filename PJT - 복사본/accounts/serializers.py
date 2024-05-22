@@ -40,10 +40,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
-  sign_up_deposits= SignupDepositSerializer(many=True)
-  sign_up_savings = SignupSavingSerializer(many=True)
+  sign_up_deposits= SignupDepositSerializer(many=True, read_only=True)
+  sign_up_savings = SignupSavingSerializer(many=True, read_only=True)
   class Meta:
     model = User
     fields = '__all__'
-    read_only_fields = ('id', 'username', 'name', )
+    read_only_fields = ('id', 'username', 'name',)
 

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'finance',
     'exchange',
     'community',
+    'chatbot',
     'rest_framework',
     'rest_framework.authtoken',
     'dj_rest_auth',
