@@ -1,6 +1,7 @@
 <template>
   <div class="container my-container">
     <div class="row gy-4">
+      <!-- <div class="col-4"><Carousel /></div> -->
       <div class="col-4 d-flex justify-content-center align-items-center">
         <router-link to="/map" class="text-center image">
           <img src="@/assets/지도.avif" class="img-fluid my-image" alt="지도">
@@ -32,11 +33,13 @@
         </router-link>
       </div>
     </div>
-  </div>
+    </div>
 </template>
 
 <script setup>
 import { RouterLink } from 'vue-router'
+import Carousel from '@/components/functions/Carousel.vue'
+
 </script>
 
 <style scoped>

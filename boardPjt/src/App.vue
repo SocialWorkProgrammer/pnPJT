@@ -1,19 +1,18 @@
 <template>
   <div class="row">
-    <div class="col-8"><h1>로고</h1></div>    
     <div class="account-form col-4">
-    <div v-if="store.isLogin">
-      <RouterLink :to="{ name: 'ProfileView', params: {username : store.state.username }}"><p>어서오세요! {{ store.state.username }}</p></RouterLink>
-      <LogoutView class="menu-item" />
+      <div v-if="store.isLogin">
+        <RouterLink :to="{ name: 'ProfileView', params: {username : store.state.username }}"><p>어서오세요! {{ store.state.username }}</p></RouterLink>
+        <LogoutView class="menu-item" />
+      </div>
+      <div v-else>
+        <RouterLink :to="{ name: 'SignUpView' }" class="menu-item">[회원가입]</RouterLink>
+        <RouterLink :to="{ name: 'LoginView'}" class="menu-item">[로그인]</RouterLink>
+      </div>
     </div>
-    <div v-else>
-      <RouterLink :to="{ name: 'SignUpView' }" class="menu-item">[회원가입]</RouterLink>
-      <RouterLink :to="{ name: 'LoginView'}" class="menu-item">[로그인]</RouterLink>
-    </div>
-</div>
     <Navbar />
     <RouterView />
-  </div>
+    </div>
 </template>
 
 
