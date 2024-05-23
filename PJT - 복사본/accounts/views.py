@@ -1,8 +1,8 @@
 from django.shortcuts import render
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib import font_manager, rc
-from io import BytesIO
+# import numpy as np
+# import matplotlib.pyplot as plt
+# from matplotlib import font_manager, rc
+# from io import BytesIO
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.http import HttpResponse
