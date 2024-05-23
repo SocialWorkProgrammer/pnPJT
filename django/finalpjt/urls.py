@@ -30,5 +30,7 @@ urlpatterns = [
     # 회원가입
     path('accounts/signup/', include('dj_rest_auth.registration.urls')),
     # 프로필
-    path('profile/', include('accounts.urls'))   
+    path('profile/', include('accounts.urls')),
+    # 챗봇
+    path('chatbot/', include('chatbot.urls')), 
 ]

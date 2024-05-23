@@ -1,7 +1,6 @@
 <template>
-  <div class="container my-container">
+  <div class="container">
     <div class="row gy-4">
-      <!-- <div class="col-4"><Carousel /></div> -->
       <div class="col-4 d-flex justify-content-center align-items-center">
         <router-link to="/map" class="text-center image">
           <img src="@/assets/지도.avif" class="img-fluid my-image" alt="지도">
@@ -28,8 +27,8 @@
       </div>
       <div class="col-4 d-flex justify-content-center align-items-center">
         <router-link to="/community" class="text-center image">
-          <img src="@/assets/커뮤니티.png" class="img-fluid my-image" alt="커뮤니티">
-          <div class="label">커뮤니티</div>
+          <img src="@/assets/추천 금융상품.jpg" class="img-fluid my-image" alt="커뮤니티">
+          <div class="label">추천 금융상품</div>
         </router-link>
       </div>
     </div>
@@ -43,20 +42,16 @@ import Carousel from '@/components/functions/Carousel.vue'
 </script>
 
 <style scoped>
-.my-container {
-  max-width: 1200px;
-  margin: auto;
-}
+
 .image {
   margin : 1rem;
   padding: 1rem;
-  border: 1px solid green;
+  border: 2px solid green;
 }
 
 .my-image {
-  width: 100%;
-  height: auto;
-  max-width: 200px; /* 이미지 최대 크기 설정 */
+  width: 250px;
+  height: 250px;
 }
 
 .label {
@@ -64,11 +59,5 @@ import Carousel from '@/components/functions/Carousel.vue'
   margin-top: 10px;
   color: #333;
 }
-
-@media (min-width: 768px) {
-  .my-container {
-    padding: 20px;
-  }}
-
 
 </style>

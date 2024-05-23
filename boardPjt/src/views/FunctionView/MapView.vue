@@ -1,3 +1,40 @@
+<template>
+  <div class="container my-5">
+    <h1>주변 은행 검색</h1>
+    <div class="d-flex align-center my-5">
+      <v-select
+        :items="cities"
+        label="광역시 / 도"
+        v-model="selectedCity"
+        class="mr-2"
+      ></v-select>
+
+      <v-select
+        :items="citiesDetail"
+        label="시/군/구"
+        v-model="selectedCityDetail"
+        class="mx-2"
+      ></v-select>
+
+      <v-select
+        :items="banks"
+        label="은행"
+        v-model="selectedBank"
+        class="mx-2"
+      ></v-select>
+
+      <v-btn @click="clickSearch" class="ml-2">찾기</v-btn>
+    </div>
+    <div class="map-container mb-15">
+      <v-btn @click="clickCurrentSearch" class="current-search-btn">
+        현 지도에서 해당 은행 검색
+      </v-btn>
+      <div id="map" class="map"></div>
+    </div>
+  </div>
+</template>
+
+
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
@@ -11,7 +48,7 @@ const selectedBank = ref('전체보기')
 const banks = ref(['우리은행', '한국스탠다드차타드은행', '대구은행', '부산은행', '광주은행', '제주은행', '전북은행', '경남은행', '중소기업은행', '한국산업은행', '국민은행', '신한은행', '농협은행', '하나은행', '수협은행'])
 
 const selectedCity = ref('전체보기')
-const cities = ref(['강원도', '경기도', '경상남도', '경상북도', '광주광역시', '대구광역시', '대전광역시', '부산광역시', '서울특별시', '울산광역시', '인천시', '전라남도', '전라북도', '제주특별자치도', '충청남도', '충청북도'])
+const cities = ref(['서울특별시', '인천시', '경기도', '강원도', '경상남도', '경상북도', '광주광역시', '대구광역시', '대전광역시', '부산광역시', '울산광역시', '전라남도', '전라북도', '제주특별자치도', '충청남도', '충청북도'])
 const selectedCityDetail = ref('전체보기')
 const citiesDetail = ref([])
 
@@ -156,44 +193,10 @@ const clickCurrentSearch = () => {
 }
 </script>
 
-<template>
-  <div class="container">
-    <h1>주변 은행 검색</h1>
-    <div class="d-flex align-center my-5">
-      <v-select
-        :items="cities"
-        label="광역시 / 도"
-        v-model="selectedCity"
-        class="mr-2"
-      ></v-select>
-
-      <v-select
-        :items="citiesDetail"
-        label="시/군/구"
-        v-model="selectedCityDetail"
-        class="mx-2"
-      ></v-select>
-
-      <v-select
-        :items="banks"
-        label="은행"
-        v-model="selectedBank"
-        class="mx-2"
-      ></v-select>
-
-      <v-btn @click="clickSearch" class="ml-2">찾기</v-btn>
-    </div>
-    <div class="map-container mb-15">
-      <v-btn @click="clickCurrentSearch" class="current-search-btn">
-        현 지도에서 해당 은행 검색
-      </v-btn>
-      <div id="map" class="map"></div>
-    </div>
-  </div>
-</template>
 
 
 <style scoped>
+
 .map-container {
   position: relative;
 }

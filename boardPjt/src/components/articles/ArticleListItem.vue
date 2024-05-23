@@ -3,7 +3,7 @@
         <RouterLink
         :to="{ name: 'DetailView', params: {id: article.id}}" class="custom-link">{{article.title}}</RouterLink>
         <!-- <p>{{article}}</p> -->
-        <p>{{ article.user.username }}</p>
+        <RouterLink :to="{ name:'ProfileView', params:{username : article.user.username}}"><p>{{ article.user.username }}</p></RouterLink>
         <hr>
         <!-- article serializer가 잘 나오는지 확인하는 용도 -->
         <!-- <p>{{ article }}</p> -->
@@ -12,6 +12,10 @@
 
 <script setup>
 import {RouterLink} from 'vue-router'
+import { useBoardStore } from '@/stores/counter'
+
+const store = useBoardStore()
+
 defineProps({
     article: Object
 })

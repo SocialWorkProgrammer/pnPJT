@@ -1,13 +1,29 @@
 <template>
   <div>
-    <h1>가입한 상품 목록</h1>
-    <h3>예금</h3>
-    <p v-for="deposit in user.sign_up_deposits" :key="deposit.fin_prdt_nm">{{ deposit.fin_prdt_nm }}</p>
-    <h3>적금</h3>
-    <p v-for="saving in user.sign_up_savings" :key="saving.fin_prdt_nm">{{ saving.fin_prdt_nm }}</p>
-    <!-- <div>
-      <img :src="histogramSrc" alt="가입한 상품 금리 히스토그램" v-if="histogramSrc">
-    </div> -->
+    <div class="container">
+      <h1 class="section-title">가입한 상품 목록</h1>
+      <h3 class="sub-title">예금</h3>
+      <p v-for="deposit in user.sign_up_deposits" :key="deposit.fin_prdt_nm" class="item-text">{{ deposit.fin_prdt_nm }}</p>
+      <h3 class="sub-title">적금</h3>
+      <p v-for="saving in user.sign_up_savings" :key="saving.fin_prdt_nm" class="item-text">{{ saving.fin_prdt_nm }}</p>
+    </div>
+
+    <div class="container">
+      <h1 class="title">세레브한 금융상품 추천 리스트</h1>
+      <p class="description">
+        최신 AI 기술을 적용한 금융상품 추천 리스트입니다.
+        <br>가입자는 희망 예치 기간만 입력하면, 서버 측에서 연산을 통해
+        만명이 선택한 금융상품들을 분석하고, 걸맞는 세레브한 금융상품을 추천해줍니다.
+      </p>
+
+      <div class="recommended-list">
+        <div v-for="list in recommended_list" class="category">
+          <ul class="product-list">
+            <li v-for="deposit in list" :key="deposit.fin_prdt_nm" class="product-item">{{ deposit.fin_prdt_nm }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -61,66 +77,83 @@ onMounted(() => {
   });
 });
 
-// 히스토그램을 렌더링하는 함수
-onMounted(() => {
-  // 다른 프로필 데이터 가져오기
-  // ...
+const recommended_list = ref([])
 
-  // 히스토그램 이미지 가져오기
-  axios.get(`${store.API_URL}/profile/${route.params.username}/detail/histogram`, {
+onMounted(() => {
+  axios.get(`${store.API_URL}/finance/recommend/product_recommend_period/`, {
       headers: {
         Authorization: `Token ${store.token}`
-      },
-      responseType: 'blob' // 이미지를 blob 형식으로 받기 위해 설정
+      }
     })
     .then((response) => {
-      console.log(response)
-      const url = URL.createObjectURL(response.data)
-      histogramSrc.value = url
+      console.log('추천 리스트 데이터 가져오기 성공!', response)
+      recommended_list.value = response.data
     })
     .catch((error) => {
-      console.log('히스토그램 데이터를 가져오는 데 있어 오류가 발생했습니다!', error)
+      console.log('추천 리스트 데이터를 가져오는 데 있어 오류가 발생했습니다!', error)
     })
 })
-
 
 </script>
 
 <style scoped>
 .container {
-  max-width: 800px;
-}
-
-.card {
+  max-width: 900px;
+  background-color: #f9f9f9;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  padding: 30px;
+  margin: 20px auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.card-header {
-  background-color: #f8f9fa;
-  border-bottom: none;
-  padding: 1.5rem 1rem;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+.section-title, .title {
+  font-size: 2.5rem;
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-.card-body {
-  padding: 2rem;
+.sub-title {
+  font-size: 2rem;
+  color: #333;
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 
-.form-label {
-  font-weight: bold;
+.item-text {
+  font-size: 1.6rem;
+  color: #555;
+  margin-bottom: 5px;
 }
 
-.btn-primary {
-  background-color: #007bff;
-  border: none;
-  padding: 0.75rem 1rem;
-  font-size: 1rem;
-  border-radius: 5px;
+.description {
+  font-size: 1.25rem;
+  color: #666;
+  text-align: center;
+  margin-bottom: 30px;
 }
 
-.btn-primary:hover {
-  background-color: #0056b3;
+.recommended-list {
+  margin-top: 20px;
+}
+
+.category {
+  margin-bottom: 30px;
+}
+
+.product-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.product-item {
+  font-size: 1.6rem;
+  color: #444;
+  margin-bottom: 10px;
+}
+
+.product-item:hover {
+  background-color: #e0e0e0;
 }
 </style>

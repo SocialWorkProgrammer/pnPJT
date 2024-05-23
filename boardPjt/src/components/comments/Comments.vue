@@ -1,8 +1,10 @@
 <template>
-    <div>
+    <div class="comments">
       <p>{{ comment.user.username }} - {{ comment.content }}</p>
+      <!-- <p>{{ store.articles[0].user.username }}</p> -->
+      <div v-if="comment.user.username === store.state.username">
       <v-btn
-        class="mr-2"
+        class="ml-4 mr-4"
         size="small"
         variant="tonal"
         color="green"
@@ -20,6 +22,7 @@
         댓글 삭제
       </v-btn>
     </div>
+  </div>
   </template>
   
   <script setup>
@@ -62,5 +65,12 @@
   
   <style scoped>
   /* 스타일 추가 */
+  .comments {
+    display: flex;
+    align-items:baseline;
+    padding: 5px;
+    margin: 10px;
+    font-size: 20px;
+  }
   </style>
   

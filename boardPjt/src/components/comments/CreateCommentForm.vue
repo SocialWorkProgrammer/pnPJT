@@ -1,12 +1,11 @@
 <template>
     <div>
-      <p>댓글 작성란입니다.</p>
-      <form @submit="createComment" class="comment">
+      <form @submit="createComment" class="comment-form">
         <div>
-          <label for="content">내용 : </label>
-          <input v-model.trim="content" id="content"></input>
+          <label for="content">댓글 작성 </label>
+          <input v-model.trim="content" id="content" class="comment-input" placeholder="enter키를 누르면 입력됨"></input>
         </div>
-        <input type="submit">
+        <input type="submit" class="submit-btn">
       </form>
     </div>
   </template>
@@ -45,9 +44,34 @@
   </script>
   
   <style scoped>
-  .comment{
-    border: 1px solid black;
-    
+  .comment-form{
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    font-size: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .submit-btn{
+    padding: 0.5rem 0.5rem;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background-color 0.3s;
+  }
+  .comment-input{
+    border : 3px solid gray;
+    padding : 10px;
+    border-radius : 5px;
+    margin-left: 10px;
+    width : auto;
+    height: 100%;
+    font-size: 25px;
   }
   </style>
   

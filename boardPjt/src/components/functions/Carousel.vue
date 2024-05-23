@@ -1,5 +1,5 @@
 <template>
-  <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+  <div id="carouselExampleIndicators" class="carousel slide carousel-container" data-bs-ride="carousel">
     <ol class="carousel-indicators">
       <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></li>
       <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></li>
@@ -19,16 +19,17 @@
     </div>
     <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-bs-slide="prev">
       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="sr-only">Previous</span>
     </a>
     <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-bs-slide="next">
       <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="sr-only">Next</span>
     </a>
   </div>
 </template>
 
 <script>
+import { onMounted } from 'vue';
+import { Carousel } from 'bootstrap';
+
 import voicePhishingImage from '@/assets/보이스피싱.png';
 import jobSupportImage from '@/assets/취업지원센터.png';
 import seniorEducationImage from '@/assets/시니어교육.jpg';
@@ -57,10 +58,12 @@ export default {
   },
   mounted() {
     // Bootstrap Carousel 초기화
-    const carouselElement = document.querySelector('#carouselExampleIndicators');
-    new bootstrap.Carousel(carouselElement, {
-      interval: 2000,
-      wrap: true
+    onMounted(() => {
+      const carouselElement = document.querySelector('#carouselExampleIndicators');
+      new Carousel(carouselElement, {
+        interval: 2000,
+        wrap: true
+      });
     });
   }
 };
@@ -69,8 +72,12 @@ export default {
 <style>
 .carousel-item img {
   max-height: 500px;
-  object-fit: contain; /* 이미지를 축소하여 모든 내용이 표시되게 함 */
-  width: auto; /* 비율을 유지하면서 이미지의 가로 크기를 자동으로 조정 */
-  margin: auto; /* 이미지를 중앙에 배치 */
+  object-fit: contain;
+  width: auto;
+  margin: auto;
+}
+.carousel-container {
+  background-color: #D2F5CF;
+  padding: 30px;
 }
 </style>
