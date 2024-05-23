@@ -20,16 +20,16 @@
         </router-link>
       </div>
       <div class="col-4 d-flex justify-content-center align-items-center">
-        <router-link to="/community" class="text-center image">
+        <router-link to="/finance" class="text-center image">
           <img src="@/assets/금융상품.png" class="img-fluid my-image" alt="커뮤니티">
           <div class="label">금융상품</div>
         </router-link>
       </div>
       <div class="col-4 d-flex justify-content-center align-items-center">
-        <router-link to="/community" class="text-center image">
+        <RouterLink class="text-center image" :to="{name: 'ProfileSignUpView', params : {username: store.state.username}}">
           <img src="@/assets/추천 금융상품.jpg" class="img-fluid my-image" alt="커뮤니티">
           <div class="label">추천 금융상품</div>
-        </router-link>
+        </RouterLink>
       </div>
     </div>
     </div>
@@ -38,6 +38,9 @@
 <script setup>
 import { RouterLink } from 'vue-router'
 import Carousel from '@/components/functions/Carousel.vue'
+import { useBoardStore } from '@/stores/counter'
+const store = useBoardStore()
+
 
 </script>
 

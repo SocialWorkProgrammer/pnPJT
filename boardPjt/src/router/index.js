@@ -33,8 +33,8 @@ const router = createRouter({
         {path: '', name: 'MainView', component: MainView},
         {path: 'profile/:username/', name: 'ProfileView', component: ProfileView},
         {path: 'profile/:username/detail', name: 'ProfileDetailView', component: ProfileDetailView},
-        {path: 'profile/:username/finance', name: ProfileSignUpView, component: ProfileSignUpView},
-        {path: 'profile/recommend/', name : ProfileRecommendView, component: ProfileRecommendView},
+        {path: 'profile/:username/finance', name: 'ProfileSignUpView', component: ProfileSignUpView},
+        {path: 'profile/recommend/', name : 'ProfileRecommendView', component: ProfileRecommendView},
       ]
     },
     {

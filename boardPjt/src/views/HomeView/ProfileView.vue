@@ -12,9 +12,8 @@
           <p class="profile-item"><span class="item-label">나이:</span> {{ user.age }}</p>
           <p class="profile-item"><span class="item-label">월급:</span> {{ user.salary}}</p>
           <p class="profile-item"><span class="item-label">재산:</span> {{ user.money }}</p>
-          <RouterLink :to="{name: 'ProfileDetailView', params: user.username}">[프로필 수정하러 가기]</RouterLink>
+          <RouterLink v-if="user.username === store.state.username" :to="{name: 'ProfileDetailView', params: user.username}">[프로필 수정하러 가기]</RouterLink></div>
         </div>
-      </div>
     </div>
   </div>
 </template>
@@ -45,7 +44,7 @@ onMounted(() => {
     }
   })
   .then((response) => {
-    console.log('프로필 데이터 가져오기 성공!', response)
+    console.log('프로필 데이터 가져오기 성공!', response.data)
     user.value = response.data
   })
   .catch((error) => {
