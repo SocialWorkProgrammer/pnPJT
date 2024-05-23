@@ -3,18 +3,17 @@
     <div class="container">
       <h1 class="section-title">가입한 상품 목록</h1>
       <h3 class="sub-title">예금</h3>
-      <p v-for="deposit in user.sign_up_deposits" :key="deposit.fin_prdt_nm" class="item-text">{{ deposit.fin_prdt_nm }}</p>
+      <p v-for="deposit in user.sign_up_deposits" 
+      :key="deposit.fin_prdt_nm" 
+      class="item-text">{{ deposit.fin_prdt_nm }}
+      </p>
       <h3 class="sub-title">적금</h3>
       <p v-for="saving in user.sign_up_savings" :key="saving.fin_prdt_nm" class="item-text">{{ saving.fin_prdt_nm }}</p>
     </div>
 
     <div class="container">
-      <h1 class="title">세레브한 금융상품 추천 리스트</h1>
-      <p class="description">
-        최신 AI 기술을 적용한 금융상품 추천 리스트입니다.
-        <br>가입자는 희망 예치 기간만 입력하면, 서버 측에서 연산을 통해
-        만명이 선택한 금융상품들을 분석하고, 걸맞는 금융상품을 추천해주고 싶다.
-      </p>
+      <h1 class="title">금융상품 추천 리스트</h1>
+    <p class="description">추천 로직 : 사전에 기입한 희망 예치기간을 기반으로 금융상품을 추천합니다.</p>
 
       <div class="recommended-list">
         <div v-for="list in recommended_list" class="category">
@@ -93,6 +92,8 @@ onMounted(() => {
       console.log('추천 리스트 데이터를 가져오는 데 있어 오류가 발생했습니다!', error)
     })
 })
+
+
 
 </script>
 

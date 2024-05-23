@@ -5,17 +5,12 @@ import { useRouter, useRoute } from 'vue-router'
 
 export const useBoardStore = defineStore('board', () => {
   const articles = ref([])
-  // 로컬 스토리지에 들어갈 때는 모두 문자열로 들어가기 때문에 null 값이 들어가도 ""로 저장하게 된다.
-  // 문제는 Vue3를 끄고 켤 때 token을 ref(null)로 하게되면 로컬 스토리지에 token이 아예 안 뜨기 때문에 const token=ref("")으로 하는 것이 낫다.
+  const messages = ref([])
   const token = ref("")
   const API_URL = "http://127.0.0.1:8000"
   const router = useRouter()
   const route = useRoute()
 
-  
-
-  // 빈 문자열이 아니다 -> 
-  
   // 게시글 가져오기
   const getArticles = function () {
     axios({
@@ -55,7 +50,6 @@ export const useBoardStore = defineStore('board', () => {
   }
   
   // 로그인 폼
-  
   const state = reactive({
     username: ref(null)
   })
@@ -91,9 +85,41 @@ export const useBoardStore = defineStore('board', () => {
       token.value = storedToken
     }
   }
+
+  // 메시지 보내기
+  const sendMessage = async function (message) {
+    messages.value.push({ sender: '나', content: message });
+
+    try {
+      const response = await axios.post(
+        `${API_URL}/chatbot/chat/`,
+        { message },
+        { responseType: 'text' }
+      );
+      const chatbotResponse = response.data;
+      messages.value.push({ sender: '챗봇', content: chatbotResponse });
+    } catch (error) {
+      console.error('There was an error!', error);
+      messages.value.push({ sender: 'Error', content: 'Failed to get response from the server.' });
+    }
+  }
+
   const isLogin = computed(() => {
     return token.value !== ""
   })
   
-  return { state, articles, API_URL, getArticles, isLogin, signUp, logIn, logOut, initialize, token }
+  return { 
+    state, 
+    articles, 
+    messages,
+    API_URL, 
+    getArticles, 
+    isLogin, 
+    signUp, 
+    logIn, 
+    logOut, 
+    initialize, 
+    token,
+    sendMessage
+  }
 }, { persist: true })

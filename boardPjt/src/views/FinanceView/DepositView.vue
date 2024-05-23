@@ -1,6 +1,6 @@
 <!-- src/components/DepositProducts.vue -->
 <template>
-  <div class="container">
+  <div class="row container">
     <h1>정기예금 | <RouterLink :to="{name: 'SavingView'}">정기적금</RouterLink></h1>
     <div class="search-container">
     <label for="bank">은행을 선택하세요:</label>
@@ -136,7 +136,6 @@ th {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  max-width: 400px;
   margin: auto;
   padding: 20px;
   background: #f9f9f9;

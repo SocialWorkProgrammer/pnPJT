@@ -30,7 +30,4 @@ urlpatterns = [
     path('deposit/signup_deposit/<str:deposit_code>/', views.signup_deposit),          # 예금상품 등록, 해지
     path('saving/signup_saving/<str:saving_code>/', views.signup_saving),             # 적금상품 등록, 해지
     path('recommend/product_recommend_period/', views.product_recommend_period)     # 희망 예치 기간에 맞는 예금 및 적금 상품 추천
-
-
-
 ]

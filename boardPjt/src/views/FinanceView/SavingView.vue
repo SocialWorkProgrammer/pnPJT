@@ -134,7 +134,6 @@ th {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  max-width: 400px;
   margin: auto;
   padding: 20px;
   background: #f9f9f9;

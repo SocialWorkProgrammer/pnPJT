@@ -17,7 +17,6 @@ import SavingDetailView from '@/views/FinanceView/SavingDetailView.vue'
 import ProfileView from '@/views/HomeView/ProfileView.vue'
 import ProfileDetailView from '@/views/HomeView/ProfileDetailView.vue'
 import ProfileSignUpView from '@/views/HomeView/ProfileSignUpView.vue'
-import ProfileRecommendView from '@/views/HomeView/ProfileRecommendView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -34,7 +33,6 @@ const router = createRouter({
         {path: 'profile/:username/', name: 'ProfileView', component: ProfileView},
         {path: 'profile/:username/detail', name: 'ProfileDetailView', component: ProfileDetailView},
         {path: 'profile/:username/finance', name: 'ProfileSignUpView', component: ProfileSignUpView},
-        {path: 'profile/recommend/', name : 'ProfileRecommendView', component: ProfileRecommendView},
       ]
     },
     {
