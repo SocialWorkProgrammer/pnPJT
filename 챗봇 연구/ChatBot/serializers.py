@@ -1,7 +1,7 @@
-# from rest_framework import serializers
-# from .models import Answer
+from rest_framework import serializers
+from .models import ChatMessage
 
-# class AnswerSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model=Answer
-#         fields='__all__'
+class ChatMessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChatMessage
+        fields = ['sender', 'content', 'created_at']

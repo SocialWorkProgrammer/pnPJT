@@ -3,7 +3,7 @@
     <div id="chat-container">
       <div id="chat-messages">
         <div v-for="(message, index) in messages" :key="index" class="message">
-          {{ message.sender }}: {{ message }}
+          {{ message.sender }}: {{ message.content }}
         </div>
       </div>
       <div id="user-input">
@@ -31,8 +31,12 @@ export default {
       this.messages.push({ sender: '나', content: this.userInput.trim() });
 
       try {
-        const response = await axios.post('http://127.0.0.1:8000/ChatBot/chat/', { message: this.userInput.trim() });
-        const chatbotResponse = response; // 이 부분 수정
+        const response = await axios.post(
+          'http://127.0.0.1:8000/ChatBot/chat/',
+          { message: this.userInput.trim() },
+          { responseType: 'text' } // 이 부분 추가
+        );
+        const chatbotResponse = response.data; // 응답을 텍스트로 처리
         this.messages.push({ sender: '챗봇', content: chatbotResponse });
       } catch (error) {
         console.error('There was an error!', error);
@@ -71,7 +75,7 @@ body {
   overflow-y: auto;
   padding: 10px;
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
 }
 #user-input {
   display: flex;
