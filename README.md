@@ -56,8 +56,9 @@
 
 
 # III. 데이터베이스 모델링(ERD)
+![ERD](https://github.com/SocialWorkProgrammer/pnPJT/assets/144265629/a0086c46-27fd-4b4d-ac4e-479d1ab9d46a)
 
-![ERD](https://github.com/kyb97/FinalPJT/assets/156149466/4181e081-c3df-47fd-955b-45156426e107)
+
 # IV. 금융상품 추천 알고리즘에 대한 기술적 설명
 사용자가 프로필 수정 과정에서 설정한 희망 예금 및 적금 상품 예치 기간을 입력받아 해당 기간에 맞는 상품을 추천해줍니다.<br/>
 희망 기간에서 최대 2달 이내의 추가 기간을 필요로 하는 상품까지 출력합니다.<br/>
